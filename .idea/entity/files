@@ -1,0 +1,29 @@
+Files
+    Field
+        id
+        drive_id
+        type ==> module|audio
+        timestamp
+    Routes
+        create
+            request
+                drive_id
+                type
+            response
+                this => Field
+        upload
+            request
+                files
+                type
+            response
+                this => Field
+        fetch
+            request
+                drive_id
+            response
+                this => Field
+        delete
+            request
+                drive_id
+            response
+                204 > no content

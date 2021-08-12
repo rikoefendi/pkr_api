@@ -1,0 +1,5 @@
+UserTrainings
+    Field
+        Id
+        IdUser
+        IdTraining
