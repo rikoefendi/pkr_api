@@ -5,13 +5,14 @@ import RegisterValidator from 'App/Validators/RegisterValidator'
 
 export default class AuthController {
     private userServices = new UserServices()
-    async register({request, response}: HttpContextContract){
+    async register({request, response, auth}: HttpContextContract){
         
         const data = await request.validate(RegisterValidator)     
         const user = await this.userServices.create(data, 'register')
+        const token = await auth.use('api').generate(user)
         response.ok({
             message: 'User Successfuly registered',
-            data: user
+            data: {user, token}
         })
     }
 

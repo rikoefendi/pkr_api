@@ -21,7 +21,7 @@ export default class UserServices {
             const token = await this.tokensEmail().create(user, this.mustVerifyEmail)
             Event.emit('user:register', token)
             await trx.commit()
-            return { user }
+            return user
         } catch (error) {
             trx.rollback()
             throw error
