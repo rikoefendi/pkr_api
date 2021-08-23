@@ -3,12 +3,14 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import {
     column,
     beforeSave,
+    beforeCreate,
     BaseModel,
     hasMany,
     HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import Token from './Token'
+import { GENDERS, USER_STATUS_NEW } from 'App/Const/Const'
 
 export default class User extends BaseModel {
 
@@ -31,8 +33,23 @@ export default class User extends BaseModel {
     public emailVerifiedAt?: DateTime | null
 
     @column()
-    public status?: Number = 0
+    public status?: string
 
+    @column()
+    public birthday?: Date
+
+    @column()
+    public gender?: typeof GENDERS[number]
+
+    @column()
+    public profesi?: string
+
+    @column()
+    public lastEducation?: string
+
+    @column()
+    public phone?: string
+    
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
@@ -48,6 +65,11 @@ export default class User extends BaseModel {
             user.password = await Hash.make(user.password)
         }
     }
+    @beforeCreate()
+    public static assignStatus(user: User){
+        user.status = USER_STATUS_NEW
+    }
+
     verify() {
         this.emailVerifiedAt = DateTime.now()
     }

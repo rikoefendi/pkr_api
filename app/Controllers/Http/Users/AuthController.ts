@@ -8,8 +8,8 @@ export default class AuthController {
     async register({request, response, auth}: HttpContextContract){
         
         const data = await request.validate(RegisterValidator)     
-        const user = await this.userServices.create(data, 'register')
-        const token = await auth.use('api').generate(user)
+        const user = await this.userServices.create(data)
+        const token = await auth.login(user, {expiresIn: '7d'})
         response.ok({
             message: 'User Successfuly registered',
             data: {user, token}
@@ -18,18 +18,13 @@ export default class AuthController {
 
     async login({request, response, auth}: HttpContextContract){
         const payload = request.body()
-        const token = await auth.attempt(payload.email, payload.password)
-        request.user = token.user
-        Event.emit('user:login', request)
+        const token = await auth.attempt(payload.email, payload.password, {expiresIn: '7d'})
+        Event.emit('user:login', {request, user: auth.user!})
         return token
     }
 
     async logout({auth}: HttpContextContract){
         await auth.logout()
         return {revoke: true}
-    }
-
-    async profile({request, response, auth}: HttpContextContract){
-        return auth.user
     }
 }

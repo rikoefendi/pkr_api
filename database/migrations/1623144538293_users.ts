@@ -1,4 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import { GENDERS } from 'App/Const/Const'
 
 export default class UsersSchema extends BaseSchema {
   protected tableName = 'users'
@@ -11,7 +12,12 @@ export default class UsersSchema extends BaseSchema {
       table.string('password', 180).notNullable()
       table.string('remember_me_token').nullable()
       table.string('email_verified_at').nullable()
+      table.string('phone', 16).nullable()
       table.string('status').nullable()
+      table.date('birtday').nullable()
+      table.enum('gender', GENDERS).nullable()
+      table.string('profesi').nullable()
+      table.string('last_education').nullable()
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL

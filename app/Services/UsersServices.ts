@@ -4,6 +4,7 @@ import Hash from '@ioc:Adonis/Core/Hash'
 
 import User from "App/Models/User"
 import TokenServices from './TokenServices'
+import UpdateProfileException from 'App/Exceptions/UpdateProfileException'
 export default class UserServices {
     private mustVerifyEmail = 'Verify Email Token'
     private mustForgotPassword = 'Reset Password Token'
@@ -13,10 +14,9 @@ export default class UserServices {
     private tokensPassword() {
         return new TokenServices('password_token')
     }
-    async create(data: any, state: 'register' | 'create') {
+    async create(data: any) {
         const trx = await Database.transaction()
         try {
-            if (state) { }
             const user = await User.create(data)
             const token = await this.tokensEmail().create(user, this.mustVerifyEmail)
             Event.emit('user:register', token)
@@ -26,6 +26,19 @@ export default class UserServices {
             trx.rollback()
             throw error
         }
+    }
+
+    async updateProfile(user: User, data){
+        if(data.email || data.password){
+            let message = 'Can`t Change Email from Profile'
+            if(data.password){
+                message = 'Can`t Change Password from Profile'
+            }
+            throw new UpdateProfileException(message, 403, 'E_UPDATE_PROFILE')
+        }
+        await user.merge(data)
+        await user.save()
+        return user
     }
 
     async updateEmail(user: User, newEmail) {

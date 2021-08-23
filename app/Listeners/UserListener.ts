@@ -49,9 +49,9 @@ export default class UserListener {
             url, token, user: token.user
         }).send()
     }
-    login(request: RequestContract) {
+    login({request, user}: EventsList['user:login']) {
         this.makeMail('user:login', {
-            accessIp: request.ip(), user: request.user, accessTime: DateTime.now().toFormat('dd LLL yyyy', { locale: "id" })
+            accessIp: request.ip(), user: user, accessTime: DateTime.now().toFormat('dd LLL yyyy', { locale: "id" })
         })
     }
     emailUpdate(token: EventsList['user:email:change']) {
@@ -67,7 +67,7 @@ export default class UserListener {
     }
 
     emailVerified(user: EventsList['user:email:verified']) {
-        this.makeMail('user:email:verified', user)
+        this.makeMail('user:email:verified', {user})
     }
 
     forgotPassword(token: EventsList['user:password:forgot']) {

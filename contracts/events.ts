@@ -5,7 +5,7 @@ import { TokenContract } from "App/Services/TokenServices";
 declare module '@ioc:Adonis/Core/Event' {
   interface EventsList {
       'user:register': |TokenContract<User>,
-      'user:login': RequestContract,
+      'user:login': {request: RequestContract, user: User},
       'user:email:change': TokenContract<User>,
       'user:email:verified': User,
       'user:password:updated': User,
