@@ -10,7 +10,7 @@ Route.group(() => {
         Route.post('register', 'Users/AuthController.register')
         Route.post('login', 'Users/AuthController.login')
         Route.delete('logout', 'Users/AuthController.logout').middleware(['auth'])
-        Route.get('profile', 'Users/ProfilesController.show').middleware(['auth', 'verified'])
+        Route.get('profile', 'Users/ProfilesController.show').middleware(['auth'])
         Route.put('profile', 'Users/ProfilesController.update').middleware(['auth', 'verified'])
         Route.group(() => {
             Route.post('update', 'Users/EmailsController.update').middleware(['auth'])

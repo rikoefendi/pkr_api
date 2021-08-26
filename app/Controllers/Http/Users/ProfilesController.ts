@@ -4,7 +4,7 @@ import UserServices from 'App/Services/UsersServices'
 import UpdateProfileValidator from 'App/Validators/UpdateProfileValidator'
 export default class ProfilesController {
     show({auth}: HttpContextContract){
-        return auth.user
+        return {data: auth.user}
     }
     async update({auth, request}: HttpContextContract){
         const data = await request.validate(UpdateProfileValidator)
@@ -13,6 +13,6 @@ export default class ProfilesController {
             user.status = USER_STATUS_PENDING
             user.save()
         }
-        return user
+        return {data: user}
     }
 }

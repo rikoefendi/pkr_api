@@ -32,7 +32,7 @@
     "@adonisjs/redis",
     "@adonisjs/mail",
     "@adonisjs/view",
-    "./providers/GDriveProvider"
+    "@adonisjs/drive-gcs"
   ],
   "aceProviders": [
     "@adonisjs/repl"

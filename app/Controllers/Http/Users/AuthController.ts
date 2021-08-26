@@ -2,7 +2,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Event from '@ioc:Adonis/Core/Event'
 import UserServices from 'App/Services/UsersServices'
 import RegisterValidator from 'App/Validators/RegisterValidator'
-
 export default class AuthController {
     private userServices = new UserServices()
     async register({request, response, auth}: HttpContextContract){
@@ -20,7 +19,7 @@ export default class AuthController {
         const payload = request.body()
         const token = await auth.attempt(payload.email, payload.password, {expiresIn: '7d'})
         Event.emit('user:login', {request, user: auth.user!})
-        return token
+        return {user: auth.user?.toJSON(), token}
     }
 
     async logout({auth}: HttpContextContract){
