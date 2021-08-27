@@ -32,9 +32,8 @@ Route.group(() => {
     }).prefix('users')
     Route.group(() => {
         Route.post('upload', 'FilesController.upload')
-        Route.post('create', 'FilesController.store')
-        Route.get(':uniqid', 'FilesController.fetch')
-        Route.delete(':uniqid', 'FilesController.destroy')
+        Route.get('/:type/:uniqid', 'FilesController.fetch')
+        Route.delete('/:type/:uniqid', 'FilesController.destroy')
     }).prefix('files')
     Route.group(() => {
 
