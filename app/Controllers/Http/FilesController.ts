@@ -31,6 +31,7 @@ export default class FilesController {
           size: "100mb",
           extnames: ["mp3", "aa", "aac", "pdf", "jpg", "png", "jpeg"],
         }),
+        parent_id: schema.number()
       }),
     });
     const trx = await Database.transaction();
@@ -48,7 +49,7 @@ export default class FilesController {
       file.unique = unique;
       file.type = data.type;
       file.mime = ext!;
-
+      file.parentId = data.parent_id
       await data.file?.moveToDisk(path, {
         visibility: !file.private ? "public" : "private",
         name: fileName,

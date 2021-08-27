@@ -1,34 +1,41 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
-import { FILE_TYPES } from 'App/Const/Const'
-
+import { DateTime } from "luxon";
+import {
+  BaseModel,
+  beforeCreate,
+  column,
+  computed,
+} from "@ioc:Adonis/Lucid/Orm";
+import { FILE_TYPES } from "App/Const/Const";
 export default class File extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public name: string
-
-  @column({serializeAs: ''})
-  public private: boolean = false
+  public parentId: number;
 
   @column()
-  public type: typeof FILE_TYPES[number]
+  public name: string;
 
   @column()
-  public unique: string
+  public private: boolean = false;
 
   @column()
-  public mime: string
+  public type: typeof FILE_TYPES[number];
+
+  @column()
+  public unique: string;
+
+  @column()
+  public mime: string;
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 
-  @computed({serializeAs: ''})
+  @computed()
   public get fullPath() {
-    return `${this.type.toLocaleLowerCase()}/${this.unique}.${this.mime}`
+    return `${this.type.toLocaleLowerCase()}/${this.unique}.${this.mime}`;
   }
 }

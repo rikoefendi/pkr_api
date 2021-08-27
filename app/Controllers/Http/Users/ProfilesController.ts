@@ -1,10 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { USER_STATUS_NEW, USER_STATUS_PENDING } from 'App/Const/Const'
+import { FILE_TYPE_MEMBER_USER, USER_STATUS_NEW, USER_STATUS_PENDING } from 'App/Const/Const'
+import FileServices from 'App/Services/FileServices'
 import UserServices from 'App/Services/UsersServices'
 import UpdateProfileValidator from 'App/Validators/UpdateProfileValidator'
 export default class ProfilesController {
-    show({auth}: HttpContextContract){
-        return {data: auth.user}
+    async show({auth}: HttpContextContract){
+        const file = await new FileServices().get(auth.user?.id, FILE_TYPE_MEMBER_USER)
+        return {data:{ ...auth.user?.toJSON(), ...file}}
     }
     async update({auth, request}: HttpContextContract){
         const data = await request.validate(UpdateProfileValidator)
@@ -13,6 +15,7 @@ export default class ProfilesController {
             user.status = USER_STATUS_PENDING
             user.save()
         }
-        return {data: user}
+        const file = await new FileServices().get(auth.user?.id, FILE_TYPE_MEMBER_USER)
+        return {data:{ ...user.toJSON(), ...file}}
     }
 }

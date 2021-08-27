@@ -6,10 +6,13 @@ import {
     BaseModel,
     hasMany,
     HasMany,
+    hasOne,
+    HasOne,
 } from '@ioc:Adonis/Lucid/Orm'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import Token from './Token'
-import { GENDERS } from 'App/Const/Const'
+import { FILE_TYPES, FILE_TYPE_PROFILE, GENDERS } from 'App/Const/Const'
+import File from './File'
 
 export default class User extends BaseModel {
 
@@ -74,4 +77,8 @@ export default class User extends BaseModel {
 
     @hasMany(() => Token)
     public tokens: HasMany<typeof Token>
+
+    @hasMany(() => File, {foreignKey: 'parent_id'})
+    public files: HasMany<typeof File>
+    
 }

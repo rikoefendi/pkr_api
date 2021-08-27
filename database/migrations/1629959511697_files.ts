@@ -7,6 +7,7 @@ export default class Files extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.integer('parent_id').index().notNullable()
       table.string('name', 225).notNullable()
       table.string('unique', 225).notNullable().unique().index()
       table.boolean('private').defaultTo(false)
