@@ -6,12 +6,10 @@ import {
     BaseModel,
     hasMany,
     HasMany,
-    hasOne,
-    HasOne,
 } from '@ioc:Adonis/Lucid/Orm'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import Token from './Token'
-import { FILE_TYPES, FILE_TYPE_PROFILE, GENDERS } from 'App/Const/Const'
+import { GENDERS } from 'App/Const/Const'
 import File from './File'
 
 export default class User extends BaseModel {

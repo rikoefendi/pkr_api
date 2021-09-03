@@ -17,7 +17,7 @@ export default class AuthController {
         })
     }
 
-    async login({request, response, auth}: HttpContextContract){
+    async login({request, auth}: HttpContextContract){
         const payload = request.body()
         const token = await auth.attempt(payload.email, payload.password, {expiresIn: '7d'})
         Event.emit('user:login', {request, user: auth.user!})

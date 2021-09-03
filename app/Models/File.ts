@@ -1,7 +1,6 @@
 import { DateTime } from "luxon";
 import {
   BaseModel,
-  beforeCreate,
   column,
   computed,
 } from "@ioc:Adonis/Lucid/Orm";

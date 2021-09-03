@@ -1,4 +1,4 @@
-import { RequestContract } from '@ioc:Adonis/Core/Request';
+
 import { EventsList } from '@ioc:Adonis/Core/Event'
 import Route from '@ioc:Adonis/Core/Route'
 import Mailers from 'App/Mailers/Mailers';
