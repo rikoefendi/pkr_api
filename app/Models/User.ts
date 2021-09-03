@@ -31,13 +31,16 @@ export default class User extends BaseModel {
     @column()
     public rememberMeToken?: string
 
-    @column.dateTime()
+    @column()
     public emailVerifiedAt?: DateTime | null
 
     @column()
     public status?: string
 
-    @column()
+    @column({serialize: (date: Date) => {
+        if(!date) return null
+        return DateTime.fromJSDate(date).toFormat('dd-MM-yyyy')
+    }})
     public birthday?: Date
 
     @column()
@@ -69,7 +72,7 @@ export default class User extends BaseModel {
     }
 
     verify() {
-        this.emailVerifiedAt = DateTime.fromJSDate(new Date())
+        this.emailVerifiedAt = DateTime.now()
     }
     unverified() {
         this.emailVerifiedAt = null

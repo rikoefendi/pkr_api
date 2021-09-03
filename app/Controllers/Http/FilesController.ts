@@ -22,7 +22,7 @@ export default class FilesController {
     const url = await Drive.getSignedUrl(file.fullPath);
     return { data: { ...file.toJSON(), url }, error: false, status: 200 };
   }
-  async upload({ request }: HttpContextContract) {
+  async upload({ request, response }: HttpContextContract) {
     const data = await request.validate({
       schema: schema.create({
         name: schema.string({}, [rules.maxLength(255)]),
@@ -65,7 +65,10 @@ export default class FilesController {
         await Drive.delete(fullPath);
       }
       Logger.error(error);
-      return { data: null, error: error.message, status: error.code || 500 };
+      console.log(error);
+      
+      response.status(error.status || 500)
+      return { data: null, error: error.message, status: error.status || 500 };
     }
   }
   async destroy({ request, response }: HttpContextContract) {
@@ -85,6 +88,7 @@ export default class FilesController {
       return;
     } catch (error) {
       await trx.rollback();
+      response.status(error.status || 500)
       return { error: error.message, data: null, status: error.status || 500 };
     }
   }

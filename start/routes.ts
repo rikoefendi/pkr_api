@@ -12,6 +12,7 @@ Route.group(() => {
         Route.delete('logout', 'Users/AuthController.logout').middleware(['auth'])
         Route.get('profile', 'Users/ProfilesController.show').middleware(['auth'])
         Route.put('profile', 'Users/ProfilesController.update').middleware(['auth', 'verified'])
+        Route.put('status', 'Users/ProfilesController.status').middleware(['auth', 'verified'])
         Route.group(() => {
             Route.post('update', 'Users/EmailsController.update').middleware(['auth'])
             Route.get('verify', 'Users/EmailsController.verify').as('verifyEmail')

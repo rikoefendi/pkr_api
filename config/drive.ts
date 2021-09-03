@@ -2,14 +2,14 @@ import {DriveConfig} from '@ioc:Adonis/Core/Drive'
 import Env from '@ioc:Adonis/Core/Env'
 import Application from '@ioc:Adonis/Core/Application'
 const driveConfig: DriveConfig = {
-    disk: Env.get('DRIVE_DISK', 'gcs'),
+    disk: Env.get('DRIVE_DISK', 'local'),
     
     disks: {
         local: {
             driver: 'local',
             visibility: 'public',
             root: Application.tmpPath('uploads'),
-            serveAssets: true,
+            serveFiles: true,
             basePath: '/uploads',
           },
         gcs: {
