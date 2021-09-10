@@ -14,7 +14,7 @@ export default class UsersSchema extends BaseSchema {
       table.string('email_verified_at').nullable()
       table.string('phone', 16).nullable()
       table.string('status').nullable()
-      table.date('birtday').nullable()
+      table.date('birthday').nullable()
       table.enum('gender', GENDERS).nullable()
       table.string('profesi').nullable()
       table.string('last_education').nullable()
