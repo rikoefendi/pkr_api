@@ -32,7 +32,8 @@
     "@adonisjs/redis",
     "@adonisjs/mail",
     "@adonisjs/view",
-    "@adonisjs/drive-gcs"
+    "@adonisjs/drive-gcs",
+    "./providers/MongoProvider"
   ],
   "aceProviders": [
     "@adonisjs/repl"

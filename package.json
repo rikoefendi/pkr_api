@@ -27,6 +27,7 @@
     "@poppinss/traits": "^1.0.1",
     "googleapis": "^39.2.0",
     "luxon": "^1.27.0",
+    "mongoose": "^6.0.5",
     "npm": "^7.20.5",
     "pg": "^8.7.1",
     "phc-argon2": "^1.1.1",
