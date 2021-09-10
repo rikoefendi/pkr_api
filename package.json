@@ -12,7 +12,9 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.3.1",
+    "@types/mongoose-paginate": "^5.0.10",
     "adonis-preset-ts": "^2.1.0",
+    "nik-validate": "^1.3.0",
     "pino-pretty": "^5.0.2",
     "typescript": "~4.2",
     "youch": "^2.2.2",
@@ -31,6 +33,7 @@
     "googleapis": "^39.2.0",
     "luxon": "^1.27.0",
     "mongoose": "^6.0.5",
+    "mongoose-paginate": "^5.0.3",
     "pg": "^8.7.1",
     "phc-argon2": "^1.1.1",
     "proxy-addr": "^2.0.7",

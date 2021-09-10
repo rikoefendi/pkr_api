@@ -1,4 +1,5 @@
 import { Schema, model, SchemaDefinition } from "@ioc:Mongoose";
+import Paginate from 'mongoose-paginate'
 class Base {
     private static _schema: Schema;
     public static timestamps: boolean;
@@ -33,6 +34,7 @@ class Base {
         this._schema.loadClass(this);
         
         this.boot(this._schema);
+        this._schema.plugin(Paginate)
         const Model = model(name, this._schema);
         this._schema.indexes().forEach(index => {
             Model.createIndexes(index)

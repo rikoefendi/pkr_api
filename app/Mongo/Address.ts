@@ -1,16 +1,27 @@
+import { Schema } from "@ioc:Mongoose"
 import Base from "./Base"
 
-class Address extends Base{
-    static get schema(){
+class Address extends Base {
+    static boot(_: Schema) {
+        // schema.index({
+        //     name: 'text'
+        // })
+        _.set('versionKey', false)
+        _.set('timestamps', false)
+    }
+    static get schema() {
         return {
-            email: {
+            _id: Number,
+            name: {
                 type: String,
-                unique: true,
-                index: true
+                index: true,
+                required: true,
             },
-            registerAt: {
-                type: Date,
-                index: true
+            type: String,
+            parent_id: {
+                type: Number,
+                index: true,
+                ref: 'Address',
             }
         }
     }

@@ -44,4 +44,7 @@ Route.group(() => {
     Route.group(() => {
 
     }).prefix('schedules')
+    Route.group(() => {
+        Route.get('suggest', 'AddressController.suggest')
+    }).prefix('address')
 }).prefix('v1')
