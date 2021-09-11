@@ -14,7 +14,8 @@ declare module '@ioc:Mongoose' {
         pass: string,
         host: string,
         port: number,
-        dbName: string
+        dbName: string,
+        url: string
     }
     const Mongoose: typeof mongoose;
     export default Mongoose

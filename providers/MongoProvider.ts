@@ -10,11 +10,16 @@ export default class MongoProvider {
     this.app.container.singleton('Mongoose', () => {
       const config = this.app.container.resolveBinding('Adonis/Core/Config').get('mongoose', {}) as MongooseConfig
       const mongoose = new Mongoose(config.options)
-      mongoose.connect(`mongodb://${config.host}:${config.port}/?readPreference=primary&ssl=false`, {
+      let url = config.url
+      if(!config.url){
+        mongoose.connect(`mongodb://${config.host}:${config.port}/?readPreference=primary&ssl=false`, {
         dbName: config.dbName,
         pass: config.pass,
         user: config.user,
       })
+      }else{
+        mongoose.connect(url)
+      }
       return mongoose
     })
 

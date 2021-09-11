@@ -11,6 +11,7 @@ const mongooseConfig: MongooseConfig = {
     user: Env.get('MONGO_USER', ''),
     pass: Env.get('MONGO_PASS', ''),
     host: Env.get('MONGO_HOST', 'localhost'),
-    port: Env.get('MONGO_PORT', 27017)
+    port: Env.get('MONGO_PORT', 27017),
+    url: Env.get('MONGO_URL')
 }
 export default mongooseConfig
