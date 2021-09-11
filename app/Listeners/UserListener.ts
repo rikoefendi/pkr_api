@@ -41,17 +41,13 @@ export default class UserListener {
     private baseUrl = Env.get('BASE_URL')
     register(token: EventsList['user:register']) {
         const body = mailers['user:register']
-        let url = ''
-        if (body.url) {
-            url = `${body.url}?token=${token.token}`
-        }
-        else {
-            url = this.baseUrl + Route.makeUrl('verifyEmail', {
+           let url = this.baseUrl + Route.makeUrl('verifyEmail', {
                 qs: {
-                    token: token.token
+                    token: token.token,
+                    redirect: body.url,
+                    status: 'register'
                 }, doamin: this.baseUrl
             })
-        }
         new Mailers(body, {
             url, token, user: token.user
         }).send()

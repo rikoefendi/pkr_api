@@ -16,13 +16,17 @@ export default class EmailsController {
             message: 'Email Successfuly change, please check email to verify new email'
         }
     }
-    async verify({ request }: HttpContextContract) {
+    async verify({ request, response }: HttpContextContract) {
         let {token} = await request.validate({
             schema: schema.create({
                 token: schema.string()
             })
         })
+        const qs = request.qs()
         await this.userService.verifyEmail(token)
+        if(qs.redirect && qs.status === 'register'){
+            return response.redirect(qs.redirect)
+        }
         return {
             message: 'email successfully verified'
         }
