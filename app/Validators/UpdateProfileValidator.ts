@@ -7,18 +7,18 @@ export default class UpdateProfileValidator {
 
   public schema = schema.create({
     phone: schema.string({}, [rules.mobile({ locales: ["id-ID"] })]),
-	birthday: schema.date({
-		format: 'dd-MM-yyyy'
-	}),
-	gender: schema.enum(GENDERS),
-	profesi: schema.string({}, [
-		rules.alpha(),
-		rules.minLength(5),
+	birthday: schema.date.optional(),
+	gender: schema.enum.optional(GENDERS),
+	jobs: schema.string.optional({}, [
 		rules.maxLength(50),
 	]),
-	last_education: schema.string({}, [
-		rules.alpha(),
-		rules.minLength(5),
+	job_duration: schema.string.optional({}, [
+		rules.maxLength(100)
+	]),
+	home_town: schema.string({}, [
+		rules.maxLength(100),
+	]),
+	str_number: schema.string.optional({}, [
 		rules.maxLength(50),
 	]),
   });

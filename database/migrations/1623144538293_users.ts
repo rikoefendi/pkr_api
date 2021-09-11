@@ -16,8 +16,10 @@ export default class UsersSchema extends BaseSchema {
       table.string('status').nullable()
       table.date('birthday').nullable()
       table.enum('gender', GENDERS).nullable()
-      table.string('profesi').nullable()
-      table.string('last_education').nullable()
+      table.string('jobs').nullable()
+      table.string('job_duration').nullable()
+      table.string('home_town').nullable()
+      table.string('str_number')
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL

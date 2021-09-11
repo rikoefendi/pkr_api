@@ -37,7 +37,7 @@ export default class User extends BaseModel {
 
     @column({serialize: (date: Date) => {
         if(!date) return null
-        return DateTime.fromJSDate(date).toFormat('dd-MM-yyyy')
+        return DateTime.fromJSDate(date).toFormat('MM-dd-yyyy')
     }})
     public birthday?: Date
 
@@ -45,10 +45,16 @@ export default class User extends BaseModel {
     public gender?: typeof GENDERS[number]
 
     @column()
-    public profesi?: string
+    public jobs?: string
 
     @column()
-    public lastEducation?: string
+    public jobDuration: string
+
+    @column()
+    public homeTown: string
+
+    @column()
+    public strNumber: number
 
     @column()
     public phone?: string
