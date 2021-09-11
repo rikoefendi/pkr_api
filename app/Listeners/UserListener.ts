@@ -9,6 +9,7 @@ const mailers = {
         from: 'info@pkr.com',
         subject: 'Verifikasi Email',
         template: 'verify',
+        url: Env.get('REGISTER_VERIFY_URL')
     },
     'user:email:verified': {
         from: 'info@pkr.com',
@@ -39,17 +40,23 @@ const mailers = {
 export default class UserListener {
     private baseUrl = Env.get('BASE_URL')
     register(token: EventsList['user:register']) {
-        let url = this.baseUrl + Route.makeUrl('verifyEmail', {
-            qs: {
-                token: token.token
-            }, doamin: this.baseUrl
-        })
-        
-        new Mailers(mailers['user:register'], {
+        const body = mailers['user:register']
+        let url = ''
+        if (body.url) {
+            url = `${body.url}?token=${token.token}`
+        }
+        else {
+            url = this.baseUrl + Route.makeUrl('verifyEmail', {
+                qs: {
+                    token: token.token
+                }, doamin: this.baseUrl
+            })
+        }
+        new Mailers(body, {
             url, token, user: token.user
         }).send()
     }
-    login({request, user}: EventsList['user:login']) {
+    login({ request, user }: EventsList['user:login']) {
         this.makeMail('user:login', {
             accessIp: request.ip(), user: user, accessTime: DateTime.now().toFormat('dd LLL yyyy', { locale: "id" })
         })
@@ -62,12 +69,12 @@ export default class UserListener {
             }, domain: this.baseUrl
         })
 
-        this.makeMail('user:email:change', {url, user})
-        
+        this.makeMail('user:email:change', { url, user })
+
     }
 
     emailVerified(user: EventsList['user:email:verified']) {
-        this.makeMail('user:email:verified', {user})
+        this.makeMail('user:email:verified', { user })
     }
 
     forgotPassword(token: EventsList['user:password:forgot']) {
@@ -78,14 +85,14 @@ export default class UserListener {
             }
         })
 
-        this.makeMail('user:password:forgot', {url, user})
+        this.makeMail('user:password:forgot', { url, user })
 
     }
     resetPassword(user: EventsList['user:password:resetted']) {
-        this.makeMail('user:password:resetted', {user})
+        this.makeMail('user:password:resetted', { user })
     }
 
-    private makeMail<K extends keyof typeof mailers>(config: K, payload){
+    private makeMail<K extends keyof typeof mailers>(config: K, payload) {
         new Mailers(mailers[config], payload).send()
     }
 }
