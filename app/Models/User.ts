@@ -85,7 +85,7 @@ export default class User extends BaseModel {
     @hasMany(() => Token)
     public tokens: HasMany<typeof Token>
 
-    @hasMany(() => File, {foreignKey: 'parent_id'})
+    @hasMany(() => File, {foreignKey: 'parentId'})
     public files: HasMany<typeof File>
     
 }

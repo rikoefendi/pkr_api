@@ -23,13 +23,14 @@ Route.group(() => {
             Route.post('forgot', 'Users/PasswordsController.forgot')
             Route.post('reset', 'Users/PasswordsController.reset').as('resetPassword')
         }).prefix('password')
-        // Route.group(() => {
-        //     Route.get('/', 'UsersController.index')
-        //     Route.post('/', 'UsersController.create')
-        //     Route.get('/:unque', 'UsersController.show')
-        //     Route.put('/:unique', 'UsersController.update')
-        //     Route.delete('/:unique', 'UsersContrller.destroy')
-        // })//.middleware('isAdmin')
+        Route.group(() => {
+            Route.get('/', 'Admin/UsersController.index')
+            Route.post('/', 'Admin/UsersController.create')
+            Route.get('/:id', 'Admin/UsersController.show')
+            Route.put('/:id', 'Admin/UsersController.update')
+            Route.put('/:id/verify', 'Admin/UsersController.verify')
+            Route.delete('/:id', 'Admin/UsersController.destroy')
+        })//.middleware('isAdmin')
     }).prefix('users')
     Route.group(() => {
         Route.post('upload', 'FilesController.upload')
