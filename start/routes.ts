@@ -98,4 +98,11 @@ Route.group(() => {
     Route.group(() => {
         Route.get('suggest', 'AddressController.suggest')
     }).prefix('address')
+    Route.group(() => {
+        Route.get('/', 'FormController.index')
+        Route.post('/', 'FormController.storeOrUpdate')
+        Route.put('/:formId', 'FormController.storeOrUpdate')
+        Route.get('/:formId', 'FormController.show')
+        Route.delete('/:formId', 'FormController.destroy')
+    }).prefix('forms')
 }).prefix('v1')
