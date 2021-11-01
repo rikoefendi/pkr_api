@@ -1,8 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import { HasMany } from '@ioc:Adonis/Lucid/Orm'
-import Answer from 'App/Models/Answer'
-import Evaluation from 'App/Models/Evaluation'
+// import { HasMany } from '@ioc:Adonis/Lucid/Orm'
+// import Answer from 'App/Models/Answer'
+// import Evaluation from 'App/Models/Evaluation'
 import Question from 'App/Models/Question'
 
 export default class QuestionsController {

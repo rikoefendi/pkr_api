@@ -49,9 +49,10 @@ export default class SubjectsController {
 	}
 
 	public async show({ request}: HttpContextContract) {
-		const subject = await Subject.query().preload('schedules', schedules => {
-			schedules.orderBy('created_at', 'asc').preload('counselor')
-		}).preload('components').where('id', request.param('id')).firstOrFail()
+		const subject = await Subject.query()//.preload('schedules', schedules => {
+			//schedules.orderBy('created_at', 'asc').preload('counselor')
+		//})//.preload('components')
+		.where('id', request.param('id')).firstOrFail()
 		
 		const subjectJSON = subject.toJSON()
 		subjectJSON.components = subjectJSON.components.map(component => {
