@@ -36,6 +36,7 @@ Route.group(() => {
         Route.post('upload', 'FilesController.upload')
         Route.get('/:type/:uniqid', 'FilesController.fetch')
         Route.delete('/:type/:uniqid', 'FilesController.destroy')
+        Route.get('/:userId/:slug/user', 'FilesController.getAudioConselingUser')
     }).prefix('files')
     Route.group(() => {
         Route.get('/', 'TrainingController.index')
@@ -43,8 +44,19 @@ Route.group(() => {
         Route.get('/:id', 'TrainingController.show')
         Route.put('/:id', 'TrainingController.storeOrUpdate')
         Route.delete('/:id', 'TrainingController.destroy')
-        Route.get('/:id/subjects', 'SubjectsController.index')
     }).prefix('trainings')
+    Route.group(() => {
+        Route.post('/', 'SchedulesController.storeOrUpdate')
+        Route.get('/:id', 'SchedulesController.show')
+        Route.put('/:id', 'SchedulesController.storeOrUpdate')
+        Route.delete('/:id', 'SchedulesController.destroy')
+    }).prefix('schedules')
+    Route.group(() => {
+        Route.post('/', 'AgendaController.storeOrUpdate')
+        Route.get('/:id', 'AgendaController.show')
+        Route.put('/:id', 'AgendaController.storeOrUpdate')
+        Route.delete('/:id', 'AgendaController.destroy')
+    }).prefix('agendas')
     Route.group(() => {
         Route.get('/:id/schedules', 'SchedulesController.index')
         Route.post('/', 'SubjectsController.storeOrUpdate')
@@ -52,12 +64,6 @@ Route.group(() => {
         Route.put('/:id', 'SubjectsController.storeOrUpdate')
         Route.delete('/:id', 'SubjectsController.destroy')
     }).prefix('subjects')
-    Route.group(() => {
-        Route.post('/', 'SchedulesController.storeOrUpdate')
-        Route.get('/:id', 'SchedulesController.show')
-        Route.put('/:id', 'SchedulesController.storeOrUpdate')
-        Route.delete('/:id', 'SchedulesController.destroy')
-    }).prefix('schedules')
     Route.group(() => {
         Route.get('/', 'CounselorsController.index')
         Route.post('/', 'CounselorsController.storeOrUpdate')

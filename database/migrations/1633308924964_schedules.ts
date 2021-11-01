@@ -6,11 +6,8 @@ export default class Schedules extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('counselor_id').index().unsigned().references('id').inTable('counselors')
-      table.integer('subject_id').index().unsigned().notNullable().references('id').inTable('subjects')
-      table.string('description')
-      table.dateTime('start_date')
-      table.dateTime('end_date')
+      table.integer('training_id')
+      table.string('name')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

@@ -4,12 +4,13 @@ import File from "App/Models/File";
 import driveConfig from "Config/drive";
 
 export default class FileServices {
-  async get(parent, types) {
+  async get(parent, types, name = '') {
     const isLocalDrive = driveConfig.disk === "local";
     const baseUrl = Env.get("BASE_URL");
     let files: any = await File.query()
       .select("unique", "type", "mime", "private")
       .where("parent_id", parent)
+      .where('name', name)
       .whereIn("type", types);
     files = await Promise.all(
       files.map(async (file) => {

@@ -4,6 +4,7 @@ import Database from "@ioc:Adonis/Lucid/Database";
 import * as Helpers from "@ioc:Adonis/Core/Helpers";
 import {
   FILE_TYPES,
+  FILE_TYPE_CONSELING,
   FILE_TYPE_IDENTITY,
   FILE_TYPE_MEMBER,
 } from "App/Const/Const";
@@ -11,6 +12,7 @@ import File from "App/Models/File";
 import { CannotWriteFileException } from "@adonisjs/drive/build/standalone";
 import Drive from "@ioc:Adonis/Core/Drive";
 import Logger from "@ioc:Adonis/Core/Logger";
+import FileServices from "App/Services/FileServices";
 export default class FilesController {
   async fetch({ request }: HttpContextContract) {
     const type: string = request.param("type").toUpperCase();
@@ -29,7 +31,7 @@ export default class FilesController {
         type: schema.enum(FILE_TYPES),
         file: schema.file({
           size: "100mb",
-          extnames: ["mp3", "aa", "aac", "pdf", "jpg", "png", "jpeg"],
+          extnames: ["mp3","mp4", "aa", "aac", "pdf", "jpg", "png", "jpeg"],
         }),
         parent_id: schema.number()
       }),
@@ -91,5 +93,10 @@ export default class FilesController {
       response.status(error.status || 500)
       return { error: error.message, data: null, status: error.status || 500 };
     }
+  }
+  async getAudioConselingUser({params}:HttpContextContract){
+    const {userId, slug} = params
+    const file = await new FileServices().get(userId, [FILE_TYPE_CONSELING], decodeURI(slug))
+      return file
   }
 }

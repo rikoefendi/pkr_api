@@ -3,7 +3,7 @@ import User from 'App/Models/User'
 // import UserServices from 'App/Services/UsersServices'
 export default class AuthController {
     // private userServices = new UserServices()
-    async index({ request, response, auth, params }: HttpContextContract) {
+    async index({ params }: HttpContextContract) {
         const users = await (await User.query().preload('files').paginate(params.page|1, 15)).toJSON()
         return {
             data: users.data,
@@ -13,7 +13,7 @@ export default class AuthController {
             meta: users.meta
         }
     }
-    async destroy({request, params, response}: HttpContextContract){
+    async destroy({ params, response}: HttpContextContract){
         const user = await User.findOrFail(params.id)
         await user.delete()
         response.status(204)

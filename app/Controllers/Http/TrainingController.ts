@@ -5,28 +5,28 @@ import Training from 'App/Models/Training'
 import map from 'lodash/map'
 export default class TrainingController {
     async index({ request }: HttpContextContract) {
-        const { page = 1 } = request.qs()
-        const trainingPaginate = await (await Training.query().preload('subjects').paginate(page, 10)).toJSON()
-        let trainings = await map(trainingPaginate.data, training => training.toJSON())
-        const subjectIds: any = []
-        map(trainings, training => {
-            subjectIds.push(...map(training.subjects, 'id'))
-        })
-        const dates = await Database.query().from('schedules').select('subject_id').min('start_date', 'start_date').max('end_date', 'end_date').whereIn('subject_id', subjectIds).groupBy('subject_id')
-        trainings = map(trainings, training => {
-            const date = dates.filter(date => {
-                return map(training.subjects, 'id').includes(date.subject_id)
-            })[0]
-            return Object.assign({}, training, date)
-        })
-        return {
-            data: trainings,
-            error: false,
-            message: 'success',
-            stattus: 200,
-            meta: trainingPaginate.meta
+        // const { page = 1 } = request.qs()
+        // const trainingPaginate = await (await Training.query().preload('subjects').paginate(page, 10)).toJSON()
+        // let trainings = await map(trainingPaginate.data, training => training.toJSON())
+        // const subjectIds: any = []
+        // map(trainings, training => {
+        //     subjectIds.push(...map(training.subjects, 'id'))
+        // })
+        // const dates = await Database.query().from('schedules').select('subject_id').min('start_date', 'start_date').max('end_date', 'end_date').whereIn('subject_id', subjectIds).groupBy('subject_id')
+        // trainings = map(trainings, training => {
+        //     const date = dates.filter(date => {
+        //         return map(training.subjects, 'id').includes(date.subject_id)
+        //     })[0]
+        //     return Object.assign({}, training, date)
+        // })
+        // return {
+        //     data: trainings,
+        //     error: false,
+        //     message: 'success',
+        //     stattus: 200,
+        //     meta: trainingPaginate.meta
 
-        }
+        // }
     }
     async storeOrUpdate({ request, response }: HttpContextContract) {
         const data = await request.validate({
@@ -34,11 +34,8 @@ export default class TrainingController {
                 name: schema.string({}, [
                     rules.maxLength(225)
                 ]),
-                description: schema.string({}, [
-                    rules.maxLength(1000),
-                    rules.minLength(20)
-                ]),
-                capacity: schema.number()
+                capacity: schema.number(),
+                status: schema.number.optional()
             })
         })
         let training: Training

@@ -6,10 +6,11 @@ export default class Subjects extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('training_id').index().notNullable().references('id').inTable('trainings')
       table.string('name')
       table.string('description')
-
+      table.string('500')
+      table.string('type')
+      table.integer('fileId')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

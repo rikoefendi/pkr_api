@@ -1,13 +1,18 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class SubjectComponentEvaluations extends BaseSchema {
-  protected tableName = 'subject_component_evaluations'
+export default class Agenda extends BaseSchema {
+  protected tableName = 'agenda'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('subject_component_id')//.index().unsigned().references('id').inTable('subject_components')
-      table.integer('evaluation_id')//.index().unsigned().references('id').inTable('evaluations')
+      table.integer('schedule_id')
+      table.timestamp('start_date')
+      table.timestamp('end_date')
+      table.string('description', 500)
+      table.string('fasilitator', 100)
+      table.boolean('self_train')
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

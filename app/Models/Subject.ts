@@ -1,14 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasOne, hasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import File from './File'
 import Schedule from './Schedule'
-import Component from './Component'
 
 export default class Subject extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-
-  @column()
-  public trainingId: number
 
   @column()
   public name: string
@@ -16,18 +13,25 @@ export default class Subject extends BaseModel {
   @column()
   public description: string
 
+  @column()
+  public type: string
+
+  @column()
+  public url: string
+
+  @column()
+  public fileId: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany(() => Schedule)
-  public schedules: HasMany<typeof Schedule>
+  @hasOne(() => File)
+  public file: HasOne<typeof File>
 
-  @manyToMany(() => Component, {
-    pivotTable: 'subject_components',
-    pivotColumns: ['label', 'description']
-  })
-  public components: ManyToMany<typeof Component>
+  @manyToMany(() => Schedule)
+  public subjects: ManyToMany<typeof Schedule>
+  
 }
