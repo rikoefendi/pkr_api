@@ -101,7 +101,7 @@ export default class SubjectsController {
 		}
 	}
 
-	async getForm({ request, params }: HttpContextContract) {
+	async getForm({ params }: HttpContextContract) {
 		const subjectForm = await (await SubjectForm.findOrFail(params.id)).toJSON()
 		const form: any = await Form.findOne({ _id: params.formId })
 		subjectForm.formId = form._id

@@ -112,6 +112,20 @@ Route.group(() => {
 
 Route.group(() => {
 	Route.resource('/trainings', 'Break/TrainingsController').apiOnly()
+	Route.group(() => {
+		Route.get(
+			'/:trainingId/:userId/joins',
+			'Break/TrainingsController.userJoinTrainings'
+		).middleware('auth')
+		Route.post(
+			'/:trainingId/:userId/join',
+			'Break/TrainingsController.userJoinTraining'
+		).middleware('auth')
+		Route.put(
+			'/:trainingId/:userId/join/:joinId/status',
+			'Break/TrainingsController.userJoinTrainingStatus'
+		).middleware('auth')
+	}).prefix('trainings')
 	Route.resource('/schedules', 'Break/SchedulesController').apiOnly()
 	Route.resource('/agenda', 'Break/AgendaController').apiOnly()
 	// Route.group(() => {
