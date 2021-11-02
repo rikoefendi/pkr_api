@@ -12,6 +12,4 @@ import { Exception } from '@adonisjs/core/build/standalone'
 | new UpdateProfileException('message', 500, 'E_RUNTIME_EXCEPTION')
 |
 */
-export default class UpdateProfileException extends Exception {
-    
-}
+export default class UpdateProfileException extends Exception {}

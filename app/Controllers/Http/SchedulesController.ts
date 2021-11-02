@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator';
+import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Schedule from 'App/Models/Schedule'
 
 export default class SchedulesController {
@@ -9,7 +9,7 @@ export default class SchedulesController {
 			data: schedules,
 			error: false,
 			message: 'success',
-			status: 200
+			status: 200,
 		}
 	}
 
@@ -17,14 +17,12 @@ export default class SchedulesController {
 		const schedulePayload = await request.validate({
 			schema: schema.create({
 				training_id: schema.number.optional([
-					rules.exists({ table: 'trainings', column: 'id' })
+					rules.exists({ table: 'trainings', column: 'id' }),
 				]),
-				name: schema.string({}, [
-					rules.maxLength(100)
-				])
-			})
+				name: schema.string({}, [rules.maxLength(100)]),
+			}),
 		})
-		const isUpdate = request.method() == 'PUT' && request.param('id')
+		const isUpdate = request.method() === 'PUT' && request.param('id')
 		let schedule: Schedule
 		if (isUpdate) {
 			schedule = await Schedule.findOrFail(request.param('id'))
@@ -38,21 +36,21 @@ export default class SchedulesController {
 			data: schedule,
 			error: false,
 			message: isUpdate ? 'updated' : 'created',
-			status: isUpdate ? 200 : 201
+			status: isUpdate ? 200 : 201,
 		}
 	}
 
-	public async show({ request}: HttpContextContract) {
+	public async show({ request }: HttpContextContract) {
 		const schedule = await Schedule.findOrFail(request.param('id'))
-		return{
+		return {
 			data: schedule,
 			error: false,
 			message: 'success',
-			status: 200
+			status: 200,
 		}
 	}
 
-	public async destroy({ request, response}: HttpContextContract) {
+	public async destroy({ request, response }: HttpContextContract) {
 		const schedule = await Schedule.findOrFail(request.param('id'))
 		await schedule.delete()
 		response.status(204)

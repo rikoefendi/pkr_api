@@ -1,37 +1,45 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasOne, hasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+	BaseModel,
+	column,
+	HasMany,
+	hasMany,
+	HasOne,
+	hasOne,
+	ManyToMany,
+	manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import File from './File'
 import Schedule from './Schedule'
+import SubjectForm from './SubjectForm'
 
 export default class Subject extends BaseModel {
-  @column({ isPrimary: true })
-  public id: number
+	@column({ isPrimary: true })
+	public id: number
 
-  @column()
-  public name: string
+	@column()
+	public name: string
 
-  @column()
-  public description: string
+	@column()
+	public description: string
 
-  @column()
-  public type: string
+	@column()
+	public type: string
 
-  @column()
-  public url: string
+	@column.dateTime({ autoCreate: true })
+	public createdAt: DateTime
 
-  @column()
-  public fileId: string
+	@column.dateTime({ autoCreate: true, autoUpdate: true })
+	public updatedAt: DateTime
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+	@hasOne(() => File, {
+		foreignKey: 'parentId',
+	})
+	public file: HasOne<typeof File>
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+	@manyToMany(() => Schedule)
+	public schedules: ManyToMany<typeof Schedule>
 
-  @hasOne(() => File)
-  public file: HasOne<typeof File>
-
-  @manyToMany(() => Schedule)
-  public subjects: ManyToMany<typeof Schedule>
-  
+	@hasMany(() => SubjectForm)
+	public forms: HasMany<typeof SubjectForm>
 }

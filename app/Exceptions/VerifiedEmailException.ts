@@ -12,5 +12,4 @@ import { Exception } from '@adonisjs/core/build/standalone'
 | new VerifiedEmailException('message', 500, 'E_RUNTIME_EXCEPTION')
 |
 */
-export default class VerifiedEmailException extends Exception {
-}
+export default class VerifiedEmailException extends Exception {}

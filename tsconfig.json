@@ -1,40 +1,28 @@
 {
-  "extends": "./node_modules/adonis-preset-ts/tsconfig",
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ],
-  "compilerOptions": {
-    "skipDefaultLibCheck": true,
-    "outDir": "build",
-    "rootDir": "./",
-    "sourceMap": true,
-    "paths": {
-      "App/*": [
-        "./app/*"
-      ],
-      "Config/*": [
-        "./config/*"
-      ],
-      "Contracts/*": [
-        "./contracts/*"
-      ],
-      "Database/*": [
-        "./database/*"
-      ]
-    },
-    "types": [
-      "@adonisjs/core",
-      "@adonisjs/repl",
-      "@adonisjs/lucid",
-      "@adonisjs/auth",
-      "@adonisjs/redis",
-      "@adonisjs/mail",
-      "@adonisjs/view",
-      "@adonisjs/drive-gcs"
-    ]
-  }
+	"extends": "./node_modules/adonis-preset-ts/tsconfig",
+	"include": ["**/*"],
+	"exclude": ["node_modules", "build"],
+	"compilerOptions": {
+		"skipDefaultLibCheck": true,
+		"outDir": "build",
+		"rootDir": "./",
+		"sourceMap": true,
+		"paths": {
+			"App/*": ["./app/*"],
+			"Config/*": ["./config/*"],
+			"Contracts/*": ["./contracts/*"],
+			"Database/*": ["./database/*"]
+		},
+		"types": [
+			"@adonisjs/core",
+			"@adonisjs/repl",
+			"@adonisjs/lucid",
+			"@adonisjs/auth",
+			"@adonisjs/redis",
+			"@adonisjs/mail",
+			"@adonisjs/view",
+			"@adonisjs/drive-gcs",
+			"@adonisjs/lucid-slugify"
+		]
+	}
 }
