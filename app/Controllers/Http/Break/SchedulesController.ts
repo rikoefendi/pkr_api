@@ -3,12 +3,18 @@ import Schedule from 'App/Models/Break/Schedule'
 import CrudServices from 'App/Services/CrudServices'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 export default class SchedulesController {
-	public crudServices: CrudServices
+	public crudServices: CrudServices<typeof Schedule>
 	constructor() {
 		this.crudServices = new CrudServices(Schedule)
 	}
-	public async index({ response }: HttpContextContract) {
-		const schedules = await this.crudServices.fetch()
+	public async index({ response, request }: HttpContextContract) {
+		const trainingId = request.qs().training_id
+		let schedules: Schedule[]
+		if (trainingId) {
+			schedules = await this.crudServices.fetch([['training_id', trainingId]])
+		} else {
+			schedules = await this.crudServices.fetch()
+		}
 		return response.formatter(schedules)
 	}
 
@@ -22,6 +28,7 @@ export default class SchedulesController {
 						column: 'id',
 					}),
 				]),
+				description: schema.string.optional(),
 			}),
 		})
 
@@ -46,6 +53,7 @@ export default class SchedulesController {
 						column: 'id',
 					}),
 				]),
+				description: schema.string.optional(),
 			}),
 		})
 		const query = this.crudServices.fetch([['id', '=', scheduleId]])

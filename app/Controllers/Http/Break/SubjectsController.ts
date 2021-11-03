@@ -3,12 +3,18 @@ import Subject from 'App/Models/Break/Subject'
 import CrudServices from 'App/Services/CrudServices'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 export default class SubjectsController {
-	public crudServices: CrudServices
+	public crudServices: CrudServices<typeof Subject>
 	constructor() {
 		this.crudServices = new CrudServices(Subject)
 	}
-	public async index({ response }: HttpContextContract) {
-		const subjects = await this.crudServices.fetch()
+	public async index({ response, request }: HttpContextContract) {
+		const scheduleId = request.qs().schedule_id
+		let subjects: Subject[]
+		if (scheduleId) {
+			subjects = await this.crudServices.fetch([['schedule_id', scheduleId]])
+		} else {
+			subjects = await this.crudServices.fetch()
+		}
 		return response.formatter(subjects)
 	}
 

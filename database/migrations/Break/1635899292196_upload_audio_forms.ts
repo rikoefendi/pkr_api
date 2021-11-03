@@ -1,23 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class TrainingsSubjects extends BaseSchema {
-	protected tableName = 'trainings_subjects'
+export default class UploadAudioForms extends BaseSchema {
+	protected tableName = 'upload_audio_forms'
 
 	public async up() {
 		this.schema.createTable(this.tableName, (table) => {
 			table.increments('id')
-			table
-				.integer('training_id')
-				.index()
-				.references('id')
-				.inTable('trainings')
-				.onDelete('CASCADE')
-			table
-				.integer('subject_id')
-				.index()
-				.references('id')
-				.inTable('subjects')
-				.onDelete('CASCADE')
+			table.integer('upload_audio_id').index().references('id').inTable('upload_audios')
+			table.integer('form_id').index()
 			/**
 			 * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
 			 */

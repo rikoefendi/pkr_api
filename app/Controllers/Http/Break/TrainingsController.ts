@@ -3,8 +3,9 @@ import Training from 'App/Models/Break/Training'
 import CrudServices from 'App/Services/CrudServices'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import UserTraining from 'App/Models/Break/UserTraining'
+import Schedule from 'App/Models/Break/Schedule'
 export default class TrainingsController {
-	public crudServices: CrudServices
+	public crudServices: CrudServices<typeof Training>
 	constructor() {
 		this.crudServices = new CrudServices(Training)
 	}
@@ -27,12 +28,16 @@ export default class TrainingsController {
 		return response.formatter(training, 201)
 	}
 
-	public async show({ params, response }: HttpContextContract) {
+	public async show({ params, response, request }: HttpContextContract) {
+		const { relations } = request.qs()
 		const trainingId = params.id
-		const training = await this.crudServices
-			.fetchByOrId([['slug', '=', params.id]], trainingId)
-			.firstOrFail()
-		return response.formatter(training)
+		let training = this.crudServices.fetchByOrId([['slug', '=', params.id]], trainingId)
+		if (relations) {
+			training = training.preload('schedules', (query) => {
+				query.preload('agenda').preload('subjects')
+			})
+		}
+		return response.formatter(await training.firstOrFail())
 	}
 
 	public async update({ request, params, response }: HttpContextContract) {
@@ -54,7 +59,6 @@ export default class TrainingsController {
 		await this.crudServices.destroyById(params.id)
 		return response.formatter(null)
 	}
-
 	async userJoinTraining({ params, response, auth }: HttpContextContract) {
 		await auth.authenticate()
 		const training: any = await this.crudServices.findById(params.trainingId)
@@ -90,10 +94,7 @@ export default class TrainingsController {
 	}
 	async userJoinTrainings({ params, response }: HttpContextContract) {
 		const userTrainingServices = new CrudServices(UserTraining)
-		const userTraining = await userTrainingServices.fetchByOrId([
-			['user_id', params.userId],
-			['training_id', params.trainingId],
-		])
+		const userTraining = await userTrainingServices.fetchByOrId([['user_id', params.userId]])
 		return response.formatter(userTraining)
 	}
 }

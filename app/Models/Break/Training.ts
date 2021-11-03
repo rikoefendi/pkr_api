@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
+import Subject from './Subject'
+import Schedule from './Schedule'
 
 export default class Training extends BaseModel {
 	@column({ isPrimary: true })
@@ -30,4 +32,10 @@ export default class Training extends BaseModel {
 
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
 	public updatedAt: DateTime
+
+	@hasMany(() => Subject)
+	public subjects: HasMany<typeof Subject>
+
+	@hasMany(() => Schedule)
+	public schedules: HasMany<typeof Schedule>
 }

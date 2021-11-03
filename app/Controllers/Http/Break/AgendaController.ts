@@ -3,12 +3,18 @@ import Agenda from 'App/Models/Break/Agenda'
 import CrudServices from 'App/Services/CrudServices'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 export default class AgendaController {
-	public crudServices: CrudServices
+	public crudServices: CrudServices<typeof Agenda>
 	constructor() {
 		this.crudServices = new CrudServices(Agenda)
 	}
-	public async index({ response }: HttpContextContract) {
-		const agenda = await this.crudServices.fetch()
+	public async index({ response, request }: HttpContextContract) {
+		const scheduleId = request.qs().schedule_id
+		let agenda: Agenda[]
+		if (scheduleId) {
+			agenda = await this.crudServices.fetch([['schedule_id', scheduleId]])
+		} else {
+			agenda = await this.crudServices.fetch()
+		}
 		return response.formatter(agenda)
 	}
 

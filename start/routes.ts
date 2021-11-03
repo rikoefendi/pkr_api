@@ -5,38 +5,6 @@ Route.get('/', async () => {
 })
 
 Route.group(() => {
-	Route.group(() => {
-		Route.post('register', 'Users/AuthController.register')
-		Route.post('login', 'Users/AuthController.login')
-		Route.delete('logout', 'Users/AuthController.logout').middleware(['auth'])
-		Route.get('profile', 'Users/ProfilesController.show').middleware(['auth'])
-		Route.put('profile', 'Users/ProfilesController.update').middleware(['auth', 'verified'])
-		Route.put('status', 'Users/ProfilesController.status').middleware(['auth', 'verified'])
-		Route.group(() => {
-			Route.post('update', 'Users/EmailsController.update').middleware(['auth'])
-			Route.get('verify', 'Users/EmailsController.verify').as('verifyEmail')
-			Route.post('verify/resend', 'Users/EmailsController.resend').as('resendVerifyEmail')
-		}).prefix('email')
-		Route.group(() => {
-			Route.post('update', 'Users/PasswordsController.update')
-			Route.post('forgot', 'Users/PasswordsController.forgot')
-			Route.post('reset', 'Users/PasswordsController.reset').as('resetPassword')
-		}).prefix('password')
-		Route.group(() => {
-			Route.get('/', 'Admin/UsersController.index')
-			Route.post('/', 'Admin/UsersController.create')
-			Route.get('/:id', 'Admin/UsersController.show')
-			Route.put('/:id', 'Admin/UsersController.update')
-			Route.put('/:id/verify', 'Admin/UsersController.verify')
-			Route.delete('/:id', 'Admin/UsersController.destroy')
-		}) //.middleware('isAdmin')
-	}).prefix('users')
-	Route.group(() => {
-		Route.post('upload', 'FilesController.upload')
-		Route.get('/:type/:uniqid', 'FilesController.fetch')
-		Route.delete('/:type/:uniqid', 'FilesController.destroy')
-		Route.get('/:userId/:slug/user', 'FilesController.getAudioConselingUser')
-	}).prefix('files')
 	// Route.group(() => {
 	//     Route.get('/', 'TrainingController.index')
 	//     Route.post('/', 'TrainingController.storeOrUpdate')
@@ -98,6 +66,35 @@ Route.group(() => {
 	//     Route.put('/:id', 'AnswersController.storeOrUpdate')
 	//     Route.delete('/:id', 'AnswersController.destroy')
 	// }).prefix('answers')
+}).prefix('v1')
+
+Route.group(() => {
+	Route.group(() => {
+		Route.post('register', 'Users/AuthController.register')
+		Route.post('login', 'Users/AuthController.login')
+		Route.delete('logout', 'Users/AuthController.logout').middleware(['auth'])
+		Route.get('profile', 'Users/ProfilesController.show').middleware(['auth'])
+		Route.put('profile', 'Users/ProfilesController.update').middleware(['auth', 'verified'])
+		Route.put('status', 'Users/ProfilesController.status').middleware(['auth', 'verified'])
+		Route.group(() => {
+			Route.post('update', 'Users/EmailsController.update').middleware(['auth'])
+			Route.get('verify', 'Users/EmailsController.verify').as('verifyEmail')
+			Route.post('verify/resend', 'Users/EmailsController.resend').as('resendVerifyEmail')
+		}).prefix('email')
+		Route.group(() => {
+			Route.post('update', 'Users/PasswordsController.update')
+			Route.post('forgot', 'Users/PasswordsController.forgot')
+			Route.post('reset', 'Users/PasswordsController.reset').as('resetPassword')
+		}).prefix('password')
+		Route.group(() => {
+			Route.get('/', 'Admin/UsersController.index')
+			Route.post('/', 'Admin/UsersController.create')
+			Route.get('/:id', 'Admin/UsersController.show')
+			Route.put('/:id', 'Admin/UsersController.update')
+			Route.put('/:id/verify', 'Admin/UsersController.verify')
+			Route.delete('/:id', 'Admin/UsersController.destroy')
+		}) //.middleware('isAdmin')
+	}).prefix('users')
 	Route.group(() => {
 		Route.get('suggest', 'AddressController.suggest')
 	}).prefix('address')
@@ -108,15 +105,17 @@ Route.group(() => {
 		Route.get('/:formId', 'FormController.show')
 		Route.delete('/:formId', 'FormController.destroy')
 	}).prefix('forms')
-}).prefix('v1')
-
-Route.group(() => {
+	Route.group(() => {
+		Route.post('upload', 'FilesController.upload')
+		Route.get('/:type/:uniqid', 'FilesController.fetch')
+		Route.delete('/:type/:uniqid', 'FilesController.destroy')
+		Route.get('/:userId/:slug/user', 'FilesController.getAudioConselingUser')
+	}).prefix('files')
 	Route.resource('/trainings', 'Break/TrainingsController').apiOnly()
 	Route.group(() => {
-		Route.get(
-			'/:trainingId/:userId/joins',
-			'Break/TrainingsController.userJoinTrainings'
-		).middleware('auth')
+		Route.get('/:userId/joins', 'Break/TrainingsController.userJoinTrainings').middleware(
+			'auth'
+		)
 		Route.post(
 			'/:trainingId/:userId/join',
 			'Break/TrainingsController.userJoinTraining'
@@ -142,4 +141,6 @@ Route.group(() => {
 	})
 		.prefix('subjects')
 		.as('subjects')
+	Route.post('upload-audio', 'Break/UploadAudiosController.store').middleware('auth')
+	Route.get('upload-audio/:subjectId', 'Break/UploadAudiosController.show').middleware('auth')
 }).prefix('break-change')

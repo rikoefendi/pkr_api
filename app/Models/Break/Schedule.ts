@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Training from './Training'
+import Agenda from './Agenda'
+import Subject from './Subject'
 
 export default class Schedule extends BaseModel {
 	@column({ isPrimary: true })
@@ -12,6 +14,9 @@ export default class Schedule extends BaseModel {
 	@column()
 	public name: string
 
+	@column()
+	public description?: string
+
 	@column.dateTime({ autoCreate: true })
 	public createdAt: DateTime
 
@@ -20,4 +25,9 @@ export default class Schedule extends BaseModel {
 
 	@belongsTo(() => Training)
 	public training: BelongsTo<typeof Training>
+
+	@hasMany(() => Agenda)
+	public agenda: HasMany<typeof Agenda>
+	@hasMany(() => Subject)
+	public subjects: HasMany<typeof Subject>
 }

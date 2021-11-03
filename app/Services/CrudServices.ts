@@ -1,6 +1,6 @@
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
-export default class CrudServices {
-	constructor(public model: typeof BaseModel) {}
+export default class CrudServices<T extends typeof BaseModel> {
+	constructor(public model: T) {}
 	async create(data) {
 		return this.model.create(data)
 	}
