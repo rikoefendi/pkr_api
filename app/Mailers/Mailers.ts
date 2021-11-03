@@ -7,7 +7,7 @@ export default class Mailers extends BaseMailer {
 		let basePath = 'emails/'
 		let config = this.config
 		let payload = this.payload
-		message.subject(config.subject).from(config.from).to(payload.user.email)
+		message.subject(config.subject).from(config.from, 'Ramah Remaja').to(payload.user.email)
 		if (config.template) message.htmlView(basePath + config.template, payload)
 	}
 }

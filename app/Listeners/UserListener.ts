@@ -5,33 +5,33 @@ import { DateTime } from 'luxon'
 import Env from '@ioc:Adonis/Core/Env'
 const mailers = {
 	'user:register': {
-		from: 'info@pkr.com',
+		from: 'info@ramahremaja.id',
 		subject: 'Verifikasi Email',
 		template: 'verify',
 		url: Env.get('REGISTER_VERIFY_URL'),
 	},
 	'user:email:verified': {
-		from: 'info@pkr.com',
+		from: 'info@ramahremaja.id',
 		subject: 'Email Berhasil di verifikasi',
 		template: 'verified',
 	},
 	'user:email:change': {
-		from: 'info@pkr.com',
+		from: 'info@ramahremaja.id',
 		subject: 'Perubahan Email',
 		template: 'change_email',
 	},
 	'user:login': {
-		from: 'info@pkr.com',
+		from: 'info@ramahremaja.id',
 		subject: 'Login Perangkat Baru',
 		template: 'user_login',
 	},
 	'user:password:forgot': {
-		from: 'reset@pkr.com',
+		from: 'info@ramahremaja.id',
 		subject: 'Lupa Kata Sandi',
 		template: 'forgot_password',
 	},
 	'user:password:resetted': {
-		from: 'reset@pkr.com',
+		from: 'info@ramahremaja.id',
 		subject: 'Lupa Kata Sandi',
 		template: 'reset_password',
 	},

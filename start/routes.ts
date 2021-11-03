@@ -91,7 +91,7 @@ Route.group(() => {
 			Route.post('/', 'Admin/UsersController.create')
 			Route.get('/:id', 'Admin/UsersController.show')
 			Route.put('/:id', 'Admin/UsersController.update')
-			Route.put('/:id/verify', 'Admin/UsersController.verify')
+			Route.put('/:id/accept', 'Admin/UsersController.accept')
 			Route.delete('/:id', 'Admin/UsersController.destroy')
 		}) //.middleware('isAdmin')
 	}).prefix('users')

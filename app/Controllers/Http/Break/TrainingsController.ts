@@ -3,7 +3,6 @@ import Training from 'App/Models/Break/Training'
 import CrudServices from 'App/Services/CrudServices'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import UserTraining from 'App/Models/Break/UserTraining'
-import Schedule from 'App/Models/Break/Schedule'
 export default class TrainingsController {
 	public crudServices: CrudServices<typeof Training>
 	constructor() {
