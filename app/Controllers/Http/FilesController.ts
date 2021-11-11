@@ -28,7 +28,7 @@ export default class FilesController {
 				type: schema.enum(FILE_TYPES),
 				file: schema.file({
 					size: '100mb',
-					extnames: ['mp3', 'mp4', 'aa', 'aac', 'pdf', 'jpg', 'png', 'jpeg'],
+					extnames: ['mp3', 'mp4','m4a', '3gp', 'aa', 'aac', 'pdf', 'jpg', 'png', 'jpeg'],
 				}),
 				parent_id: schema.number(),
 			}),
