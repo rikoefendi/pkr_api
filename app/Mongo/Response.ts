@@ -1,6 +1,12 @@
 import { Schema } from '@ioc:Mongoose'
+import { Document } from 'mongoose'
 import Base from './Base'
-
+const Patient = new Schema({
+	name: String,
+	type: String,
+	gender: String,
+	age: Number,
+})
 class Response extends Base {
 	static boot(_: Schema) {
 		// schema.index({
@@ -14,15 +20,23 @@ class Response extends Base {
 				type: Schema.Types.ObjectId,
 				ref: 'Form',
 			},
+			userId: Number,
 			response: [
 				{
-					questionId: String,
+					questionId: {
+						type: Schema.Types.ObjectId,
+					},
 					answer: String,
-					score: Number,
+					scale: Number,
 					optionId: String,
+					score: Number
 				},
 			],
+			patient: {
+				type: Patient
+			}
+
 		}
 	}
 }
-export default Response.buildModel('Response')
+export default Response.buildModel<typeof Response.schema & Document>('Response')

@@ -6,8 +6,8 @@ export default class UserTrainings extends BaseSchema {
 	public async up() {
 		this.schema.createTable(this.tableName, (table) => {
 			table.increments('id')
-			table.integer('user_id').index().references('id').inTable('users')
-			table.integer('training_id').index().references('id').inTable('trainings')
+			table.integer('user_id').index().references('id').inTable('users').onDelete('CASCADE')
+			table.integer('training_id').index().references('id').inTable('trainings').onDelete('CASCADE')
 			table.integer('status').defaultTo(0)
 			table.string('message').nullable()
 			/**

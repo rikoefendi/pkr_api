@@ -1,9 +1,9 @@
-import { Schema, model, SchemaDefinition } from '@ioc:Mongoose'
-import Paginate from 'mongoose-paginate'
+import mongoose, { Schema, SchemaDefinition } from '@ioc:Mongoose'
+import { Document, Model } from 'mongoose'
 class Base {
 	private static _schema: Schema
 	public static timestamps: boolean
-	static boot(_: Schema) {}
+	static boot(_: Schema) { }
 	static get schema(): SchemaDefinition {
 		throw new Error('You must override the static get schema() property')
 	}
@@ -24,7 +24,7 @@ class Base {
 
 		return this._schema
 	}
-	static buildModel(name) {
+	static buildModel<T extends Document>(name): Model<T> {
 		if (!name) {
 			throw new Error('You must specify a model name on Model.buildModel("ModelName") ')
 		}
@@ -32,12 +32,12 @@ class Base {
 		this._schema.loadClass(this)
 
 		this.boot(this._schema)
-		this._schema.plugin(Paginate)
-		const Model = model(name, this._schema)
+		// this._schema.plugin(Paginate)
+		const localModel = mongoose.model<T>(name, this._schema)
 		this._schema.indexes().forEach((index) => {
-			Model.createIndexes(index)
+			localModel.createIndexes(index)
 		})
-		return Model
+		return localModel
 	}
 
 	static get primaryKey(): any {

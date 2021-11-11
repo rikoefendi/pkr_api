@@ -99,11 +99,13 @@ Route.group(() => {
 		Route.get('suggest', 'AddressController.suggest')
 	}).prefix('address')
 	Route.group(() => {
-		Route.get('/', 'FormController.index')
+		Route.get('/', 'FormController.index').middleware('auth')
 		Route.post('/', 'FormController.storeOrUpdate')
 		Route.put('/:formId', 'FormController.storeOrUpdate')
 		Route.get('/:formId', 'FormController.show')
 		Route.delete('/:formId', 'FormController.destroy')
+		Route.get('/:formId/response/:userId', 'FormController.getResponseByUser')
+		Route.post('/:formId/response/:userId', 'FormController.storeResponseByUser')
 	}).prefix('forms')
 	Route.group(() => {
 		Route.post('upload', 'FilesController.upload')
@@ -125,22 +127,25 @@ Route.group(() => {
 			'Break/TrainingsController.userJoinTrainingStatus'
 		).middleware('auth')
 	}).prefix('trainings')
-	Route.resource('/schedules', 'Break/SchedulesController').apiOnly()
-	Route.resource('/agenda', 'Break/AgendaController').apiOnly()
+	Route.resource('/schedules', 'Break/SchedulesController').apiOnly().middleware({'*': 'auth'})
+	Route.resource('/agenda', 'Break/AgendaController').apiOnly().middleware({'*': 'auth'})
 	// Route.group(() => {
 	// }).prefix('/trainings').as('trainings')
 	// Route.group(() => {
 	// }).prefix('/schedules').as('schedules')
 	// Route.group(() => {
 	// }).prefix('/agenda').as('agenda')
-	Route.resource('/subjects', 'Break/SubjectsController')
+	Route.resource('/subjects', 'Break/SubjectsController').apiOnly().middleware({'*': 'auth'})
 	Route.group(() => {
-		Route.get('/:subjectId/forms', 'Break/SubjectsController.getFormBySubjectId').as(
-			'getFormBySubjectId'
-		)
+		Route.get('/:subjectId/forms', 'Break/SubjectsController.getFormBySubjectId')
+		Route.post('/:subjectId/forms', 'Break/SubjectsController.storeForm')
 	})
-		.prefix('subjects')
-		.as('subjects')
-	Route.post('upload-audio', 'Break/UploadAudiosController.store').middleware('auth')
-	Route.get('upload-audio/:subjectId', 'Break/UploadAudiosController.show').middleware('auth')
+		.prefix('subjects')//.middleware('auth')
+	Route.group(() => {
+		Route.post('/', 'Break/UploadAudiosController.store').middleware('auth')
+		Route.get('/:subjectId', 'Break/UploadAudiosController.show').middleware('auth')
+		Route.get('/:audioId/forms', 'Break/UploadAudiosController.indexForm')
+		Route.post('/:audioId/form', 'Break/UploadAudiosController.storeForm')
+		Route.get('/:audiId/form/:formId', 'Break/UploadAudiosController.showForm')
+	}).prefix('upload-audio')
 }).prefix('break-change')

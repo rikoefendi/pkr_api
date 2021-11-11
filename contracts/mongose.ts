@@ -6,7 +6,7 @@ declare module '@ioc:Mongoose' {
 	import * as mongoose from 'mongoose'
 	// Export everything from Mongoose
 	// Since that's what our provider is doing
-	export { Schema, SchemaDefinition, model } from 'mongoose'
+	export { Schema, SchemaDefinition } from 'mongoose'
 	export interface MongooseConfig {
 		options: MongooseOptions
 		user: string

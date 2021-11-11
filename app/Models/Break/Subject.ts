@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import SubjectForm from './SubjectForm'
 
 export default class Subject extends BaseModel {
 	@column({ isPrimary: true })
@@ -22,4 +23,8 @@ export default class Subject extends BaseModel {
 
 	@column.dateTime({ autoCreate: true, autoUpdate: true })
 	public updatedAt: DateTime
+
+	@hasMany(() => SubjectForm)
+	public forms: HasMany<typeof SubjectForm>
+
 }

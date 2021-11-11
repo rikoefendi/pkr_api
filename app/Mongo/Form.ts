@@ -1,4 +1,5 @@
 import { Schema } from '@ioc:Mongoose'
+import { Document } from 'mongoose'
 import Base from './Base'
 
 class Form extends Base {
@@ -19,14 +20,16 @@ class Form extends Base {
 			description: {
 				type: String,
 			},
+			whoCanAccess: String,
 			questions: [
 				{
 					question: String,
 					isChallenge: Boolean,
-					isScore: Number,
+					isScale: Number,
 					options: [
 						{
 							option: String,
+							score: Number
 						},
 					],
 				},
@@ -35,4 +38,4 @@ class Form extends Base {
 		}
 	}
 }
-export default Form.buildModel('Form')
+export default Form.buildModel<typeof Form.schema & Document>('Form')

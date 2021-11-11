@@ -2,7 +2,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import { FILE_TYPE_MODULE } from 'App/Const/Const'
 import Subject from 'App/Models/Subject'
-import SubjectForm from 'App/Models/SubjectForm'
 import UserSubject from 'App/Models/UserSubject'
 import Form from 'App/Mongo/Form'
 
@@ -52,7 +51,6 @@ export default class SubjectsController {
 
 	public async show({ request }: HttpContextContract) {
 		const subject = await Subject.query()
-			.preload('forms')
 			.preload('file', (query) => {
 				query.where('type', FILE_TYPE_MODULE)
 			})
@@ -73,7 +71,7 @@ export default class SubjectsController {
 		return
 	}
 
-	async assignForm({ request, response, params }: HttpContextContract) {
+	async assignForm({ request, response }: HttpContextContract) {
 		const assignPayload = await request.validate({
 			schema: schema.create({
 				formId: schema.string(),
@@ -91,26 +89,26 @@ export default class SubjectsController {
 			}
 		}
 
-		const subjectForm = new SubjectForm()
-		subjectForm.formId = assignPayload.formId
-		subjectForm.label = assignPayload.label
-		subjectForm.subjectId = params.id
-		await subjectForm.save()
-		return {
-			data: subjectForm,
-		}
+		// const subjectForm = new SubjectForm()
+		// subjectForm.formId = assignPayload.formId
+		// subjectForm.label = assignPayload.label
+		// subjectForm.subjectId = params.id
+		// await subjectForm.save()
+		// return {
+		// 	data: subjectForm,
+		// }
 	}
 
-	async getForm({ params }: HttpContextContract) {
-		const subjectForm = await (await SubjectForm.findOrFail(params.id)).toJSON()
-		const form: any = await Form.findOne({ _id: params.formId })
-		subjectForm.formId = form._id
-		subjectForm.label = subjectForm.label || form.name
-		subjectForm.questions = form.questions
-		return {
-			data: subjectForm,
-		}
-	}
+	// async getForm({ params }: HttpContextContract) {
+		// const subjectForm = await (await SubjectForm.findOrFail(params.id)).toJSON()
+		// const form: any = await Form.findOne({ _id: params.formId })
+		// subjectForm.formId = form._id
+		// subjectForm.label = subjectForm.label || form.name
+		// subjectForm.questions = form.questions
+		// return {
+		// 	data: subjectForm,
+		// }
+	// }
 
 	async assignUser({ request, params, auth }: HttpContextContract) {
 		await auth.authenticate()

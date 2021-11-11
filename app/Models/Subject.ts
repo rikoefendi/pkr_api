@@ -2,8 +2,6 @@ import { DateTime } from 'luxon'
 import {
 	BaseModel,
 	column,
-	HasMany,
-	hasMany,
 	HasOne,
 	hasOne,
 	ManyToMany,
@@ -11,7 +9,6 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import File from './File'
 import Schedule from './Schedule'
-import SubjectForm from './SubjectForm'
 
 export default class Subject extends BaseModel {
 	@column({ isPrimary: true })
@@ -40,6 +37,4 @@ export default class Subject extends BaseModel {
 	@manyToMany(() => Schedule)
 	public schedules: ManyToMany<typeof Schedule>
 
-	@hasMany(() => SubjectForm)
-	public forms: HasMany<typeof SubjectForm>
 }

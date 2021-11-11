@@ -18,12 +18,10 @@ export default class AddressController {
 			type: 'city',
 		}
 		if (query) queryOptions.name = { $regex: new RegExp(`${query}`, 'i') }
-		const { docs, pages, total } = await Address.paginate(queryOptions, {
-			page,
-			limit: perPage,
+		const docs = await Address.find(queryOptions, {
 			lean: true,
 			populate: 'parent_id',
-		})
+		}).limit(10)
 
 		const data = [] as any
 		for (let i = 0; i < docs.length; i++) {
@@ -40,8 +38,7 @@ export default class AddressController {
 		return {
 			data,
 			meta: {
-				pages,
-				total,
+				total: 10,
 				perPage,
 				page,
 			},
