@@ -100,7 +100,7 @@ export default class FormController {
 		}
 		const responseUser = Object.assign({}, responsePayload, params)
 		const patientType = responsePayload?.patient?.type!
-		const paramFind: any = {userId: params.userId, formId:  params.formId}
+		const paramFind: any = params
 		if(patientType){
 			paramFind['patient.type'] = patientType
 		}

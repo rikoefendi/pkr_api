@@ -30,7 +30,7 @@ export default class SubjectForm extends BaseModel {
 		await Promise.all(subjects.map(async subject => {
 			const form = await Form.findById(subject.formId)
 			subject.questions = form?.questions
-			const response = await Response.find({formId: subject.formId as any, userId }).count()
+			const response = await Response.find({formId: subject.formId as any, userId, subjectId: subject.subjectId as any }).count()
 			subject.status = response ? true: false
 			subject.type = form?.type
 			subject.whoCanAccess = form?.whoCanAccess

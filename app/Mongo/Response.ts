@@ -20,6 +20,9 @@ class Response extends Base {
 				type: Schema.Types.ObjectId,
 				ref: 'Form',
 			},
+			subjectId: {
+				type: Number
+			},
 			userId: Number,
 			response: [
 				{
