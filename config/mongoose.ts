@@ -3,7 +3,7 @@ import { MongooseConfig } from '@ioc:Mongoose'
 
 const mongooseConfig: MongooseConfig = {
 	options: {
-		debug: false,
+		debug: true,
 		autoCreate: true,
 		autoIndex: false,
 	},

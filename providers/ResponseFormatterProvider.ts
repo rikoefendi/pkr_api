@@ -1,5 +1,5 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
-import { responseFormatter } from 'App/utils'
+import { ResponseFormatter } from 'App/utils'
 
 export default class ResponseFormatterProvider {
 	public static needsApplication = true
@@ -11,9 +11,9 @@ export default class ResponseFormatterProvider {
 		Response.macro(
 			'formatter',
 			function (data: any, status?: number, message?: any, error: boolean = false) {
-				const res = responseFormatter(data, status, message, error)
+				const res = new ResponseFormatter(data, status, message, error)
 				this.ctx?.response.status(res.status).send(res)
-				return
+				return res
 			}
 		)
 	}

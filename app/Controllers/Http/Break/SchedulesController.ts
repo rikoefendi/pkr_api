@@ -38,7 +38,9 @@ export default class SchedulesController {
 
 	public async show({ params, response }: HttpContextContract) {
 		const scheduleId = params.id
-		const schedule = await this.crudServices.fetch([['id', '=', scheduleId]]).firstOrFail()
+		const schedule = await this.crudServices.fetch([['id', '=', scheduleId]]).preload('subjects', query =>{
+			query.preload('forms')
+		}).preload('agenda').firstOrFail()
 		return response.formatter(schedule)
 	}
 

@@ -3,14 +3,25 @@ import Training from 'App/Models/Break/Training'
 import CrudServices from 'App/Services/CrudServices'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import UserTraining from 'App/Models/Break/UserTraining'
+import Database from '@ioc:Adonis/Lucid/Database'
+import map from 'lodash/map'
 export default class TrainingsController {
 	public crudServices: CrudServices<typeof Training>
 	constructor() {
 		this.crudServices = new CrudServices(Training)
 	}
-	public async index({ response }: HttpContextContract) {
-		const trainings = await this.crudServices.fetch()
-		return response.formatter(trainings)
+	public async index({ response, request }: HttpContextContract) {
+		const training = await this.crudServices.fetch().preload('schedules').paginate(request.qs().page)
+		let data = training.all().map(train => train.toJSON())
+		const agendaIds: Array<number> = []
+		data.map(train => train.schedules.map(agenda => agendaIds.push(agenda.id)))
+		const agenda = await Database.query().from('agenda').select('schedule_id').min('start_date', 'start_date').max('end_date', 'end_date').whereIn('schedule_id', agendaIds).groupBy('schedule_id')
+		data = data.map(train => {
+			const date = agenda.filter(date => map(train.schedules, 'id').includes(date.schedule_id))[0]
+			delete date.schedule_id
+			return Object.assign({}, train, date)
+		})
+		return response.formatter(data).setMeta(training.getMeta())
 	}
 
 	public async store({ request, response }: HttpContextContract) {
@@ -27,15 +38,9 @@ export default class TrainingsController {
 		return response.formatter(training, 201)
 	}
 
-	public async show({ params, response, request }: HttpContextContract) {
-		const { relations } = request.qs()
+	public async show({ params, response }: HttpContextContract) {
 		const trainingId = params.id
-		let training = this.crudServices.fetchByOrId([['slug', '=', params.id]], trainingId)
-		if (relations) {
-			training = training.preload('schedules', (query) => {
-				query.preload('agenda').preload('subjects')
-			})
-		}
+		let training = this.crudServices.fetchByOrId([['slug', '=', params.id]], trainingId).preload('schedules')
 		return response.formatter(await training.firstOrFail())
 	}
 
@@ -83,7 +88,7 @@ export default class TrainingsController {
 		const query = userTrainingServices.fetchByOrId([
 			['id', params.joinId],
 			['user_id', params.userId],
-			['training_id', params.trainingId],
+			['schedule_id', params.trainingId],
 		])
 		const userTraining = await userTrainingServices.update(query, {
 			status,

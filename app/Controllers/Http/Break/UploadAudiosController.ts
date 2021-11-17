@@ -3,8 +3,36 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import Drive from '@ioc:Adonis/Core/Drive'
 import UploadAudio from 'App/Models/Break/UploadAudio'
 import File from 'App/Models/File'
+import Response from 'App/Mongo/Response'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class UploadAudiosController {
+    async index({request, response}: HttpContextContract){
+        let {forms, page, subject_id} = request.qs()
+        let query = UploadAudio.query().preload('user').preload('audio')
+        if(subject_id){
+            query = query.where('subject_id', subject_id)
+        }
+        forms = forms.split(',').map(form => ({formId: form}))
+        const audios = await query.paginate(page)
+        const userIds: Array<number> = []
+        const responseToFind:any = []
+        audios.all().map(audio => {
+            userIds.push(audio.userId)
+        })
+        const subjectForm = await Database.from('subject_forms').where('subject_id', subject_id).select({subjectId: 'id'})
+        userIds.map(userId => {
+            responseToFind.push({$or: [...forms], $and: [{userId, $or: subjectForm}]})
+        })
+        const responses = await Response.find({$or: responseToFind});
+        audios.all().map(audio => {
+            audio.responses = responses.filter(res => {
+                return audio.userId === res.userId as any && forms.map(form => form.formId).includes(res.formId.toString())
+            })
+        })
+        return response.formatter(audios.all()).setMeta(audios.getMeta())
+    }
+
     async store({ request, response }: HttpContextContract) {
         const payload = await request.validate({
             schema: schema.create({
@@ -13,7 +41,7 @@ export default class UploadAudiosController {
                 file_id: schema.number()
             })
         })
-        const uploadAudio = await UploadAudio.create(payload)
+        const uploadAudio = await UploadAudio.create(payload as any)
         return response.formatter(uploadAudio, 201)
     }
     async show({ params, response, auth }: HttpContextContract) {

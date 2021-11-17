@@ -142,6 +142,7 @@ Route.group(() => {
 	})
 		.prefix('subjects')//.middleware('auth')
 	Route.group(() => {
+		Route.get('/', 'Break/UploadAudiosController.index')
 		Route.post('/', 'Break/UploadAudiosController.store').middleware('auth')
 		Route.get('/:subjectId', 'Break/UploadAudiosController.show').middleware('auth')
 		Route.get('/:audioId/forms', 'Break/UploadAudiosController.indexForm')
