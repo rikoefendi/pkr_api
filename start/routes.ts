@@ -104,7 +104,7 @@ Route.group(() => {
 		Route.put('/:formId', 'FormController.storeOrUpdate')
 		Route.get('/:formId', 'FormController.show')
 		Route.delete('/:formId', 'FormController.destroy')
-		Route.get('/:formId/response/:userId/:subjectId', 'FormController.getResponseByUser')
+		Route.get('/:formId/response/:userId/:subjectId/:responseId', 'FormController.getResponseByUser')
 		Route.post('/:formId/response/:userId/:subjectId', 'FormController.storeResponseByUser')
 	}).prefix('forms')
 	Route.group(() => {

@@ -30,10 +30,11 @@ export default class SubjectForm extends BaseModel {
 		await Promise.all(subjects.map(async subject => {
 			const form = await Form.findById(subject.formId)
 			subject.questions = form?.questions
-			const response = await Response.find({formId: subject.formId as any, userId, subjectId: subject.id as any }).count()
+			const response = await Response.findOne({formId: subject.formId as any, userId, subjectId: subject.id as any })
 			subject.status = response ? true: false
 			subject.type = form?.type
 			subject.whoCanAccess = form?.whoCanAccess
+			subject.responseId = response?._id as any
 			if (!subject.label) {
 				subject.label = form?.name as any
 			}
@@ -48,4 +49,7 @@ export default class SubjectForm extends BaseModel {
 	public whoCanAccess?: StringConstructor
 	@computed()
 	public status: boolean
+
+	@computed()
+	public responseId?: string
 }

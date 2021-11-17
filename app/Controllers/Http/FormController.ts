@@ -120,10 +120,7 @@ export default class FormController {
 		if(!form){
 			return response.formatter(null, 404, 'Not Found')
 		}
-		const responses = await Response.find({...params})
-		if(responses.length > 1){
-			return response.formatter(responses)
-		}
-		return response.formatter(responses[0] || null)
+		const responses = await Response.findById(params.responseId)
+		return response.formatter(responses || null)
 	}
 }
