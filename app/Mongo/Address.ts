@@ -1,4 +1,5 @@
 import { Schema } from '@ioc:Mongoose'
+import { Document } from 'mongoose'
 import Base from './Base'
 
 class Address extends Base {
@@ -26,4 +27,4 @@ class Address extends Base {
 		}
 	}
 }
-export default Address.buildModel('Address')
+export default Address.buildModel<typeof Address.schema & Document >('Address')

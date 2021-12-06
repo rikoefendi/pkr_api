@@ -50,7 +50,7 @@ const databaseConfig: DatabaseConfig = {
 				paths: ['./database/migrations/Break'],
 			},
 			healthCheck: false,
-			debug: false,
+			debug: true,
 		},
 	},
 }

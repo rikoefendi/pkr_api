@@ -149,4 +149,18 @@ Route.group(() => {
 		Route.post('/:audioId/form', 'Break/UploadAudiosController.storeForm')
 		Route.get('/:audiId/form/:formId', 'Break/UploadAudiosController.showForm')
 	}).prefix('upload-audio')
+	Route.group(() =>{
+		Route.get('/', 'Break/VirtualsController.index')
+		Route.get('/:virtualId', 'Break/VirtualsController.show')
+		Route.post('/', 'Break/VirtualsController.storeOrUpdate')
+		Route.put('/:virtualId', 'Break/VirtualsController.storeOrUpdate')
+		Route.delete('/:virtualId', 'Break/VirtualsController.destroy')
+	}).prefix('virtuals')
+	Route.group(() => {
+		Route.get('/', 'Break/QuestionsController.index')
+		Route.get('/:questionId', 'Break/QuestionsController.show')
+		Route.post('/', 'Break/QuestionsController.storeOrUpdate')
+		Route.put('/:questionId', 'Break/QuestionsController.storeOrUpdate')
+		Route.delete('/:questionId', 'Break/QuestionsController.destroy')
+	}).prefix('questions')
 }).prefix('break-change')
