@@ -11,12 +11,12 @@ export default class SubjectsController {
 		const scheduleId = request.qs().schedule_id
 		let subjects
 		if (scheduleId) {
-			subjects = this.crudServices.fetch([['schedule_id', scheduleId]])
+			subjects = this.crudServices.fetch([['schedule_id', scheduleId]]).preload('virtual')
 		} else {
 			subjects = this.crudServices.fetch()
 		}
 		subjects = await subjects.preload('forms')
-		
+
 		return response.formatter(subjects)
 	}
 
@@ -32,16 +32,16 @@ export default class SubjectsController {
 						column: 'id',
 					}),
 				]),
+				virtual_id: schema.number.optional()
 			}),
 		})
-
 		const subject = await this.crudServices.create(payload)
 		return response.formatter(subject, 201)
 	}
 
 	public async show({ params, response }: HttpContextContract) {
 		const subjectId = params.id
-		const subject = await this.crudServices.fetch([['id', subjectId]]).preload('forms').firstOrFail()
+		const subject = await this.crudServices.fetch([['id', subjectId]]).preload('forms').preload('virtual').firstOrFail()
 		return response.formatter(subject)
 	}
 
@@ -58,6 +58,7 @@ export default class SubjectsController {
 						column: 'id',
 					}),
 				]),
+				virtual_id: schema.number.optional()
 			}),
 		})
 		const query = this.crudServices.fetch([['id', subjectId]])
@@ -70,7 +71,7 @@ export default class SubjectsController {
 		return response.formatter(null)
 	}
 
-	public async storeForm({ params, response, request }) {
+	public async storeForm({ params, response, request }: HttpContextContract) {
 		const subject = await Subject.findOrFail(params.subjectId)
 		const forms = await request.validate({
 			schema: schema.create({

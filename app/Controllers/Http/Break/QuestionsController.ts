@@ -19,6 +19,7 @@ export default class QuestionsController {
                 question: schema.string({}, [rules.minLength(10)]),
                 questionId: schema.number.optional(),
                 virtualId: schema.number.optional(),
+                comment: schema.string.optional(),
                 actions: schema.string.optional()
             })
         })
@@ -39,7 +40,5 @@ export default class QuestionsController {
         const questionId = params.questionId
         await Question.findOrFail(questionId)
         return response.formatter(null, 200, 'Deleted')
-        
-
     }
 }

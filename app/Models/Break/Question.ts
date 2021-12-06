@@ -14,6 +14,8 @@ export default class Question extends BaseModel {
   @column()
   public questionId?: number
   
+  public comment?: string
+
   @column()
   public actions?: string
 

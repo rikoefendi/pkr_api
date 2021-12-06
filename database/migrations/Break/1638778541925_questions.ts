@@ -9,6 +9,7 @@ export default class Questions extends BaseSchema {
       table.integer('virtual_id').index().nullable().references('id').inTable('virtuals').onDelete('cascade')
       table.integer('question_id').index().nullable().references('id').inTable('questions').onDelete('cascade')
       table.text('question').notNullable()
+      table.text('comment').nullable()
       table.string('actions').nullable()
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
