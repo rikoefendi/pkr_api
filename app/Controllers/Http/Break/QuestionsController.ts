@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import Question from 'App/Models/Break/Question'
+import Question, { cans } from 'App/Models/Break/Question'
 export default class QuestionsController {
     async index({response}: HttpContextContract){
         const question = await Question.query().paginate(10)
@@ -20,7 +20,9 @@ export default class QuestionsController {
                 questionId: schema.number.optional(),
                 virtualId: schema.number.optional(),
                 comment: schema.string.optional(),
-                actions: schema.string.optional()
+                actions: schema.string.optional(),
+                can: schema.enum(cans),
+                type: schema.enum(cans)
             })
         })
         if (isUpdate) {
@@ -29,6 +31,8 @@ export default class QuestionsController {
             question.questionId = payload.questionId as any
             question.virtualId = payload.virtualId as any
             question.actions = payload.actions as any
+            question.can = payload.can as any
+            question.type = payload.type as any
             await question.save()
             return response.formatter(question, 200, 'Success', false)
         }

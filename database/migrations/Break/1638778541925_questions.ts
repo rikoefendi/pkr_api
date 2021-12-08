@@ -1,4 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import { cans } from 'App/Models/Break/Question'
 
 export default class Questions extends BaseSchema {
   protected tableName = 'questions'
@@ -11,6 +12,8 @@ export default class Questions extends BaseSchema {
       table.text('question').notNullable()
       table.text('comment').nullable()
       table.string('actions').nullable()
+      table.enum('can', cans).notNullable()
+      table.enum('type', cans).notNullable()
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

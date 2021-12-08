@@ -163,4 +163,10 @@ Route.group(() => {
 		Route.put('/:questionId', 'Break/QuestionsController.storeOrUpdate')
 		Route.delete('/:questionId', 'Break/QuestionsController.destroy')
 	}).prefix('questions')
+	Route.group(() => {
+		Route.post('/', 'Break/ConversationsController.create')
+		Route.get('/fetchByUserId/:userId', 'Break/ConversationsController.fetchByUserId')
+		Route.get('/fetchMessage/:conversationId', 'Break/ConversationsController.fetchMessages')
+		Route.post('/:conversationId/:questionId', 'Break/ConversationsController.storeMessage')
+	}).prefix('conversations')
 }).prefix('break-change')
