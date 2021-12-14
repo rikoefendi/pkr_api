@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { afterFetch, afterFind, BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Message from './Message'
 
 export default class Learning extends BaseModel {
