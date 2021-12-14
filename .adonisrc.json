@@ -19,7 +19,9 @@
 		"./start/kernel",
 		{
 			"file": "./start/events",
-			"environment": ["web"]
+			"environment": [
+				"web"
+			]
 		}
 	],
 	"providers": [
@@ -35,11 +37,16 @@
 		"@adonisjs/lucid-slugify",
 		"./providers/ResponseFormatterProvider"
 	],
-	"aceProviders": ["@adonisjs/repl"],
+	"aceProviders": [
+		"@adonisjs/repl"
+	],
 	"metaFiles": [
 		{
 			"pattern": "resources/views/**/*.edge",
 			"reloadServer": false
 		}
-	]
+	],
+	"directories": {
+		"public": "assets"
+	}
 }

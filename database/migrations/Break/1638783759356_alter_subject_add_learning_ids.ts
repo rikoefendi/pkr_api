@@ -1,11 +1,11 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class AlterSubjectAddVirtualIds extends BaseSchema {
+export default class AlterSubjectAddLearningIds extends BaseSchema {
   protected tableName = 'subjects'
 
   public async up () {
     this.schema.alterTable(this.tableName, (table) => {
-      table.integer('virtual_id').nullable().index()
+      table.integer('learning_id').nullable().index()
     })
   }
 

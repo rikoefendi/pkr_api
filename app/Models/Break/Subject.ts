@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import SubjectForm from './SubjectForm'
-import Virtual from './Virtual'
+import Learning from './Learning'
 
 export default class Subject extends BaseModel {
 	@column({ isPrimary: true })
@@ -11,7 +11,7 @@ export default class Subject extends BaseModel {
 	public scheduleId: number
 
 	@column()
-	public virtualId: number
+	public learningId: number
 
 	@column()
 	public name: string
@@ -31,6 +31,6 @@ export default class Subject extends BaseModel {
 	@hasMany(() => SubjectForm)
 	public forms: HasMany<typeof SubjectForm>
 
-	@belongsTo(() => Virtual)
-	public virtual: BelongsTo<typeof Virtual>
+	@belongsTo(() => Learning)
+	public learning: BelongsTo<typeof Learning>
 }

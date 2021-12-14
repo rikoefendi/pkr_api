@@ -1,51 +1,59 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import Conversation from 'App/Mongo/Conversation'
+import Conversation from 'App/Models/Break/Conversation'
+import Message from 'App/Models/Break/Message'
 export default class ConversationsController {
-    async index({ response }: HttpContextContract) {
-        const conversations = await Conversation.find()
-        return response.formatter(conversations)
-    }
 
-    async show({ response, params }) {
-        const conversation = await Conversation.findOne({ _id: params.messageId }).populate('conversations')
-        return response.formatter(conversation)
-    }
-    async storeOrUpdate({ request, response, params }: HttpContextContract) {
-        const messageId = params.messageId
-        const isUpdate = request.method() === 'PUT' && messageId
-
+    async create({ request, response }: HttpContextContract) {
         const payload = await request.validate({
             schema: schema.create({
-                type: schema.enum.optional(['patient', 'parent', 'counselor']),
-                message: schema.string.optional({}, !isUpdate ? [rules.required()] : []),
-                repply: schema.array.optional().members(schema.string())
+                userId: schema.number([rules.exists({
+                    table: 'users',
+                    column: 'id'
+                })]),
+                learningId: schema.number([rules.exists({
+                    table: 'learnings',
+                    column: 'id'
+                })]),
+                label: schema.string.optional({}, [rules.maxLength(220)])
             })
         })
-        if (isUpdate) {
-            const conversation = await Conversation.findOne({ _id: messageId })
-            if (!conversation) return response.formatter(null, 404, 'Not Found')
-            const repplies = [...(conversation['repply.repplies'] || []), ...(payload.repply || [])]
-            conversation['repply.type'] = payload.type
-            conversation['repply.repplies'] = repplies.filter((item, index) => repplies.indexOf(item) !== index)
-            conversation['message'] = payload.message as any
-            await conversation.save()
-            return response.formatter(conversation, 200, 'Updated')
+        const conversation = await Conversation.create(payload)
+        return response.formatter(conversation, 201)
+    }
+    async destroy({ response, params }: HttpContextContract) {
+        const { conversationId, userId } = params
+        if (userId) {
+            await Conversation.query().where('user_id', userId).delete()
+        } else {
+            await (await Conversation.findOrFail(conversationId)).delete()
         }
-        const conversation = await Conversation.create({
-            message: payload.message,
-            repply: {
-                type: payload.type,
-                repplies: payload.repply
-            }
-        })
-        return response.formatter(conversation, 201, 'Created')
+        return response.formatter(null, 200, 'Deleted')
+    }
+    async fetchByUserId({ request, response, params }: HttpContextContract) {
+        const userId = params.userId
+        const leraningId = request.qs().leraningId
+        let query = Conversation.query().where('user_id', userId)
+        if (leraningId) {
+            query = query.where('learning_id', leraningId).preload('learning')
+        } else {
+            query = query.preload('messages')
+        }
+        const conversation = await query
+        return response.formatter(conversation)
     }
 
-    async destroy({ response, params }: HttpContextContract) {
-        const conversation = await Conversation.findOne({ _id: params.messageId })
-        if (!conversation) response.formatter(null, 404, 'Not Found')
-        await conversation?.delete()
-        return response.formatter(null, 200, 'Deleted')
+    async fetchMessages({ response, params }: HttpContextContract) {
+        const conversationId = params.conversationId
+        const conversation = await Conversation.query().where('id', conversationId)
+            .preload('messages', query => query.pivotColumns(['created_at']).orderBy('pivot_created_at', 'asc').preload('messages')).firstOrFail()
+        return response.formatter(conversation)
+    }
+
+    async storeMessage({ response, params }: HttpContextContract) {
+        const conversation = await Conversation.findOrFail(params.conversationId)
+        let message = await Message.query().preload('messages').where('id', params.messageId).firstOrFail()
+        await conversation.related('messages').attach([message.id])
+        return response.formatter(message)
     }
 }

@@ -11,7 +11,7 @@ export default class SubjectsController {
 		const scheduleId = request.qs().schedule_id
 		let subjects
 		if (scheduleId) {
-			subjects = this.crudServices.fetch([['schedule_id', scheduleId]]).preload('virtual')
+			subjects = this.crudServices.fetch([['schedule_id', scheduleId]]).preload('learning')
 		} else {
 			subjects = this.crudServices.fetch()
 		}
@@ -32,7 +32,7 @@ export default class SubjectsController {
 						column: 'id',
 					}),
 				]),
-				virtual_id: schema.number.optional()
+				learning_id: schema.number.optional()
 			}),
 		})
 		const subject = await this.crudServices.create(payload)
@@ -41,7 +41,7 @@ export default class SubjectsController {
 
 	public async show({ params, response }: HttpContextContract) {
 		const subjectId = params.id
-		const subject = await this.crudServices.fetch([['id', subjectId]]).preload('forms').preload('virtual').firstOrFail()
+		const subject = await this.crudServices.fetch([['id', subjectId]]).preload('forms').preload('learning').firstOrFail()
 		return response.formatter(subject)
 	}
 
@@ -58,7 +58,7 @@ export default class SubjectsController {
 						column: 'id',
 					}),
 				]),
-				virtual_id: schema.number.optional()
+				learning_id: schema.number.optional()
 			}),
 		})
 		const query = this.crudServices.fetch([['id', subjectId]])

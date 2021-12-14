@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
-import Question from './Question'
-import Virtual from './Virtual'
+import Message from './Message'
+import Learning from './Learning'
 import User from '../User'
 
 export default class Conversation extends BaseModel {
@@ -9,7 +9,7 @@ export default class Conversation extends BaseModel {
   public id: number
 
   @column()
-  public virtualId: number
+  public learningId: number
 
   @column()
   public userId: number
@@ -23,12 +23,14 @@ export default class Conversation extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @manyToMany(() => Question)
-  public questions: ManyToMany<typeof Question>
+  @manyToMany(() => Message, {
+    pivotTimestamps: true
+  })
+  public messages: ManyToMany<typeof Message>
 
-  @belongsTo(() => Virtual)
-  public virtual: BelongsTo<typeof Virtual>
-  
+  @belongsTo(() => Learning)
+  public learning: BelongsTo<typeof Learning>
+
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>
 }

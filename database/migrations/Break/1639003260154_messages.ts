@@ -1,12 +1,15 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-export default class ConversationQuestions extends BaseSchema {
-  protected tableName = 'conversation_question'
+import { MessageTypes } from 'App/Models/Break/Message'
+
+export default class Messages extends BaseSchema {
+  protected tableName = 'messages'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('conversation_id').index().unsigned().references('id').inTable('conversations')
-      table.integer('question_id').index().unsigned().references('id').inTable('questions')
+      table.text('message').notNullable()
+      table.text('comment').nullable()
+      table.enum('type', MessageTypes).notNullable()
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

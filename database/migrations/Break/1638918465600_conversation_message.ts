@@ -1,14 +1,12 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-
-export default class Conversations extends BaseSchema {
-  protected tableName = 'conversations'
+export default class ConversationQuestions extends BaseSchema {
+  protected tableName = 'conversation_message'
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('user_id').index().unsigned().references('id').inTable('users').onDelete('cascade')
-      table.integer('learning_id').index().unsigned().references('id').inTable('learnings').onDelete('cascade')
-      table.string('label').nullable()
+      table.integer('conversation_id').index().unsigned().references('id').inTable('conversations').onDelete('cascade')
+      table.integer('message_id').index().unsigned().references('id').inTable('messages').onDelete('cascade')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import Question from './Question'
+import { afterFetch, afterFind, BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import Message from './Message'
 
-export default class Virtual extends BaseModel {
+export default class Learning extends BaseModel {
   @column({ isPrimary: true })
   public id: number
   
@@ -21,6 +21,6 @@ export default class Virtual extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany(() => Question)
-  public questions: HasMany<typeof Question>
+  @manyToMany(() => Message)
+  public messages: ManyToMany<typeof Message>
 }
