@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import { ManyToMany } from '@ioc:Adonis/Lucid/Orm'
-import Message, { MessageTypes } from 'App/Models/Break/Message'
+import Message, { MessageStaging, MessageTypes } from 'App/Models/Break/Message'
 export default class MessagesController {
     async index({response}: HttpContextContract){
         const message = await Message.query().paginate(10)
@@ -17,9 +17,10 @@ export default class MessagesController {
         const isUpdate = request.method() === 'PUT' && messageId
         const payload = await request.validate({
             schema: schema.create({
-                message: schema.string({}, [rules.minLength(10)]),
+                message: schema.string({}, []),
                 comment: schema.string.optional(),
-                type: schema.enum(MessageTypes)
+                type: schema.enum(MessageTypes),
+                stage: schema.enum.optional(MessageStaging)
             })
         })
         if (isUpdate) {

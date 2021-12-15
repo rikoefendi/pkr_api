@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { afterFind, BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 export const MessageTypes = ['parent', 'patient', 'counselor'] as const
 import HttpContext from '@ioc:Adonis/Core/HttpContext'
 import User from '../User'
@@ -12,6 +12,7 @@ const Avatars = {
     'patient-male': `${BASE_URL}/patient-male.png`,
     'patient-female': `${BASE_URL}/patient-female.png`,
 }
+export const MessageStaging = ['ENGAGING', 'FOCUSING', 'EVOKING', 'PLANNING'] as const
 export default class Message extends BaseModel {
   public user?: User
   public learningGender?: String
@@ -33,6 +34,9 @@ export default class Message extends BaseModel {
   public actions?: string
 
   @column()
+  public stage?: typeof MessageStaging[number]
+
+  @column()
   public type: typeof MessageTypes[number]
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -46,11 +50,6 @@ export default class Message extends BaseModel {
   })
   public messages: ManyToMany<typeof Message>
 
-  @afterFind()
-  public static async getAdditionalData(messages: Message[]) {
-    console.log(HttpContext.get(), messages);
-
-  }
 
   @computed()
   public get name() {
