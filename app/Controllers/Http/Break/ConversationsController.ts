@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import Database from '@ioc:Adonis/Lucid/Database'
 import Conversation from 'App/Models/Break/Conversation'
 import Message from 'App/Models/Break/Message'
 export default class ConversationsController {
@@ -19,6 +20,8 @@ export default class ConversationsController {
             })
         })
         const conversation = await Conversation.create(payload)
+        conversation.count = (await Database.from(Conversation.table).where('user_id', payload.userId).where('learning_id', payload.learningId).count('* as count'))[0].count
+
         return response.formatter(conversation, 201)
     }
     async destroy({ response, params }: HttpContextContract) {
@@ -40,6 +43,7 @@ export default class ConversationsController {
             query = query.preload('messages')
         }
         const conversation = await query
+
         return response.formatter(conversation)
     }
 
@@ -47,6 +51,7 @@ export default class ConversationsController {
         const conversationId = params.conversationId
         const conversation = await Conversation.query().where('id', conversationId)
             .preload('messages', query => query.pivotColumns(['created_at']).orderBy('pivot_created_at', 'asc').preload('messages')).firstOrFail()
+        conversation.count = (await Database.from(Conversation.table).where('user_id', conversation.userId).where('learning_id', conversation.learningId).count('* as count'))[0].count
         return response.formatter(conversation)
     }
 
